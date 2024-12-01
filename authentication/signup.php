@@ -1,10 +1,44 @@
+<?php
+include("../include/database.php");
+
+if (isset($_POST["submit"])) {
+    $name = $_POST["name"];
+    $dob = $_POST["dob"];
+    $email = $_POST["email"];
+    $contactnumber = $_POST["contactnumber"];
+    $icnumber = $_POST["icnumber"];
+    $password = $_POST["password"];
+    $confirmpassword = $_POST["confirmpassword"];
+
+    $sql1 = "SELECT * FROM user_info WHERE ic_number = '$icnumber'";
+    $result1 = mysqli_query($connection, $sql1);
+    $sql2 = "SELECT * FROM user_info WHERE email = '$email'";
+    $result2 = mysqli_query($connection, $sql2);
+
+    if (mysqli_num_rows($result2) > 0) {
+        echo "<script>alert('This email already registered.')</script>";
+    } else if (mysqli_num_rows($result1) > 0) {
+        echo "<script>alert('This IC number already registered.')</script>";
+    } else if ($password != $confirmpassword) {
+        echo "<script>alert('The password and confirm-password must be the same.');</script>";
+    } else {
+        $hashedpassword = password_hash($password, PASSWORD_BCRYPT);
+
+        $sql = "INSERT INTO user_info (name, dob, email, contact_number, ic_number,password) VALUES ('$name','$dob','$email','$contactnumber','$icnumber','$hashedpassword')";
+        mysqli_query($connection, $sql);
+        echo "<script>alert('Account created.');</script>";
+        header("Location: signin.php");
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Healthsync</title>
     <style>
         @font-face {
             font-family: Montserrat;
@@ -65,12 +99,6 @@
             left: 5%;
         }
 
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-
         #right-container {
             position: absolute;
             width: 30vw;
@@ -124,6 +152,7 @@
             position: absolute;
             width: 30%;
             height: 6%;
+            top: 69%;
             left: 35%;
             background-color: #b6def1;
             color: white;
@@ -138,7 +167,7 @@
             text-decoration: none;
         }
 
-        #hypertext-container{
+        #hypertext-container {
             position: absolute;
             top: 77%;
             width: 100%;
@@ -161,26 +190,25 @@
                 <label for="name" class="form-label-left">Name:</label>
                 <label for="dob" class="form-label-right">Date of Birth:</label>
                 <br>
-                <input type="text" class="form-field-left" id="name" required>
-                <input type="date" class="form-field-right" id="dob" required>
+                <input type="text" class="form-field-left" id="name" name="name" required>
+                <input type="date" class="form-field-right" id="dob" name="dob" required>
                 <br><br><br><br>
                 <label for="email" class="form-label-left">Email:</label>
                 <label for="contactnumber" class="form-label-right">Contact Number:</label>
                 <br>
-                <input type="email" class="form-field-left" id="email" required>
-                <input type="number" class="form-field-right" id="contactnumber" pattern="^\d{3}-\d{7}$" placeholder="016-3679616" required>
+                <input type="email" class="form-field-left" id="email" name="email" required>
+                <input type="text" class="form-field-right" id="contactnumber" name="contactnumber" pattern="[0-9]{3}-[0-9]{7}" placeholder="016-3679616" required>
                 <br><br><br><br>
                 <label for="icnumber" class="form-label-left">IC Number:</label>
                 <br>
-                <input type="number" class="form-field-left" id="icnumber" pattern="^\d{6}-\d{2}-\d{4}$" required>
+                <input type="text" class="form-field-left" id="icnumber" name="icnumber" pattern="[0-9]{6}-[0-9]{2}-[0-9]{4}" placeholder="010123-07-1259" required>
                 <br><br><br><br>
                 <label for="password" class="form-label-left">Password:</label>
                 <label for="confirmpassword" class="form-label-right">Confirm Password:</label>
                 <br>
-                <input type="password" class="form-field-left" id="password" required>
-                <input type="password" class="form-field-right" id="confirmpassword" required>
-                <br><br><br><br><br>
-                <input type="submit" id="submit-btn" value="Sign Up" disabled>
+                <input type="password" class="form-field-left" id="password" name="password" required>
+                <input type="password" class="form-field-right" id="confirmpassword" name="confirmpassword" required>
+                <input type="submit" id="submit-btn" name="submit" value="Sign Up" disabled>
                 <div id="hypertext-container">
                     <a href="signin.php" id="signin-hypertext">Already have an account? Sign In</a>
                 </div>
@@ -188,6 +216,166 @@
         </div>
     </div>
 
+    <script>
+        const name = document.getElementById("name");
+        const dob = document.getElementById("dob");
+        const email = document.getElementById("email");
+        const contactnumber = document.getElementById("contactnumber");
+        const icnumber = document.getElementById("icnumber");
+        const password = document.getElementById("password");
+        const confirmpassword = document.getElementById("confirmpassword");
+        const submit = document.getElementById("submit-btn");
+
+        let namefilled = false;
+        let dobfilled = false;
+        let emailfilled = false;
+        let contactnumberfilled = false;
+        let icnumberfilled = false;
+        let passwordfilled = false;
+        let confirmpasswordfilled = false;
+
+        name.addEventListener("input", checkname);
+        dob.addEventListener("input", checkdob);
+        email.addEventListener("input", checkemail);
+        contactnumber.addEventListener("input", checkcontactnumber);
+        icnumber.addEventListener("input", checkicnumber);
+        password.addEventListener("input", checkpassword);
+        confirmpassword.addEventListener("input", checkconfirmpassword);
+
+        function checkname() {
+            if (name.value.length > 0) {
+                namefilled = true
+            } else {
+                namefilled = false;
+                submit.disabled = true;
+                submit.style.backgroundColor = "#cbeeff";
+                submit.removeEventListener("mouseover", hover);
+                submit.removeEventListener("mouseout", unhover);
+            }
+            if (namefilled == true && dobfilled == true && emailfilled == true && contactnumberfilled == true && icnumberfilled == true && passwordfilled == true && confirmpasswordfilled == true) {
+                submit.disabled = false;
+                submit.style.backgroundColor = "#9dd1ea";
+                submit.addEventListener("mouseover", hover);
+                submit.addEventListener("mouseout", unhover);
+            }
+        }
+
+        function checkdob() {
+            if (dob.value.length > 0) {
+                dobfilled = true
+            } else {
+                dobfilled = false;
+                submit.disabled = true;
+                submit.style.backgroundColor = "#cbeeff";
+                submit.removeEventListener("mouseover", hover);
+                submit.removeEventListener("mouseout", unhover);
+            }
+            if (namefilled == true && dobfilled == true && emailfilled == true && contactnumberfilled == true && icnumberfilled == true && passwordfilled == true && confirmpasswordfilled == true) {
+                submit.disabled = false;
+                submit.style.backgroundColor = "#9dd1ea";
+                submit.addEventListener("mouseover", hover);
+                submit.addEventListener("mouseout", unhover);
+            }
+        }
+
+        function checkemail() {
+            if (email.value.length > 0) {
+                emailfilled = true
+            } else {
+                emailfilled = false;
+                submit.disabled = true;
+                submit.style.backgroundColor = "#cbeeff";
+                submit.removeEventListener("mouseover", hover);
+                submit.removeEventListener("mouseout", unhover);
+            }
+            if (namefilled == true && dobfilled == true && emailfilled == true && contactnumberfilled == true && icnumberfilled == true && passwordfilled == true && confirmpasswordfilled == true) {
+                submit.disabled = false;
+                submit.style.backgroundColor = "#9dd1ea";
+                submit.addEventListener("mouseover", hover);
+                submit.addEventListener("mouseout", unhover);
+            }
+        }
+
+        function checkcontactnumber() {
+            if (contactnumber.value.length > 0) {
+                contactnumberfilled = true
+            } else {
+                contactnumberfilled = false;
+                submit.disabled = true;
+                submit.style.backgroundColor = "#cbeeff";
+                submit.removeEventListener("mouseover", hover);
+                submit.removeEventListener("mouseout", unhover);
+            }
+            if (namefilled == true && dobfilled == true && emailfilled == true && contactnumberfilled == true && icnumberfilled == true && passwordfilled == true && confirmpasswordfilled == true) {
+                submit.disabled = false;
+                submit.style.backgroundColor = "#9dd1ea";
+                submit.addEventListener("mouseover", hover);
+                submit.addEventListener("mouseout", unhover);
+            }
+        }
+
+        function checkicnumber() {
+            if (icnumber.value.length > 0) {
+                icnumberfilled = true
+            } else {
+                icnumberfilled = false;
+                submit.disabled = true;
+                submit.style.backgroundColor = "#cbeeff";
+                submit.removeEventListener("mouseover", hover);
+                submit.removeEventListener("mouseout", unhover);
+            }
+            if (namefilled == true && dobfilled == true && emailfilled == true && contactnumberfilled == true && icnumberfilled == true && passwordfilled == true && confirmpasswordfilled == true) {
+                submit.disabled = false;
+                submit.style.backgroundColor = "#9dd1ea";
+                submit.addEventListener("mouseover", hover);
+                submit.addEventListener("mouseout", unhover);
+            }
+        }
+
+        function checkpassword() {
+            if (password.value.length > 0) {
+                passwordfilled = true
+            } else {
+                passwordfilled = false;
+                submit.disabled = true;
+                submit.style.backgroundColor = "#cbeeff";
+                submit.removeEventListener("mouseover", hover);
+                submit.removeEventListener("mouseout", unhover);
+            }
+            if (namefilled == true && dobfilled == true && emailfilled == true && contactnumberfilled == true && icnumberfilled == true && passwordfilled == true && confirmpasswordfilled == true) {
+                submit.disabled = false;
+                submit.style.backgroundColor = "#9dd1ea";
+                submit.addEventListener("mouseover", hover);
+                submit.addEventListener("mouseout", unhover);
+            }
+        }
+
+        function checkconfirmpassword() {
+            if (confirmpassword.value.length > 0) {
+                confirmpasswordfilled = true
+            } else {
+                confirmpasswordfilled = false;
+                submit.disabled = true;
+                submit.style.backgroundColor = "#cbeeff";
+                submit.removeEventListener("mouseover", hover);
+                submit.removeEventListener("mouseout", unhover);
+            }
+            if (namefilled == true && dobfilled == true && emailfilled == true && contactnumberfilled == true && icnumberfilled == true && passwordfilled == true && confirmpasswordfilled == true) {
+                submit.disabled = false;
+                submit.style.backgroundColor = "#9dd1ea";
+                submit.addEventListener("mouseover", hover);
+                submit.addEventListener("mouseout", unhover);
+            }
+        }
+
+        function hover() {
+            submit.style.backgroundColor = "#84c8e8";
+        }
+
+        function unhover() {
+            submit.style.backgroundColor = "#9dd1ea";
+        }
+    </script>
 </body>
 
 </html>

@@ -1,10 +1,33 @@
+<?php
+include("../include/database.php");
+
+if (isset($_POST["submit"])) {
+    $email = $_POST["email"];
+    $password = $_POST["password"];
+
+    $sql = "SELECT password FROM user_info WHERE email = '$email'";
+    $result = mysqli_query($connection, $sql);
+    $valuereturned = mysqli_fetch_assoc($result);
+
+    if (mysqli_num_rows($result) == 1) {
+        if (password_verify($password, $valuereturned["password"])) {
+            header("Location: ../patient/home.php");
+        } else {
+            echo "<script>alert('Invalid password.');</script>";
+        }
+    } else {
+        echo "<script>alert('Account not found.');</script>";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HealSync</title>
+    <title>HealthSync</title>
     <style>
         @font-face {
             font-family: Montserrat;
@@ -31,7 +54,7 @@
         .form-field {
             position: absolute;
             width: 100%;
-            height: 8%;
+            height: 13%;
             margin-top: 3%;
             outline: none;
             border-radius: 5px;
@@ -66,20 +89,20 @@
 
         #form-container {
             position: absolute;
-            top: 32%;
+            top: 45%;
             width: 40%;
-            height: 50%;
+            height: 30%;
             border: 0px solid black;
             border-radius: 5px;
             display: flex;
-            align-items: center;
         }
 
         #submit-btn {
             margin: 0%;
             position: absolute;
             width: 80%;
-            height: 8%;
+            height: 13%;
+            top: 73%;
             left: 10%;
             background-color: #b6def1;
             color: white;
@@ -91,10 +114,18 @@
 
         #fgtpass-hypertext {
             position: absolute;
-            top: 63%;
             right: 0%;
             font-family: Roboto;
             text-decoration: none;
+        }
+
+        #fgtpass-hypertext-container {
+            position: absolute;
+            top: 59%;
+            width: 100%;
+            background-color: transparent;
+            display: flex;
+            justify-content: center;
         }
 
         #logo-container {
@@ -116,9 +147,9 @@
             text-decoration: none;
         }
 
-        #hypertext-container{
+        #newuser-hypertext-container {
             position: absolute;
-            top: 83%;
+            top: 87%;
             width: 100%;
             background-color: transparent;
             display: flex;
@@ -139,15 +170,16 @@
             <form method="post" action="signin.php" autocomplete="off">
                 <label for="email" class="form-label">Email Address:</label>
                 <br>
-                <input type="email" class="form-field" id="email" required>
+                <input type="email" class="form-field" id="email" name="email" required>
                 <br><br><br>
                 <label for="password" class="form-label">Password:</label>
                 <br>
-                <input type="password" class="form-field" id="password" required>
-                <a href="" id="fgtpass-hypertext">Forgot Password? </a>
-                <br><br><br><br><br>
-                <input type="submit" id="submit-btn" value="Sign In" disabled>
-                <div id="hypertext-container">
+                <input type="password" class="form-field" id="password" name="password" required>
+                <div id="fgtpass-hypertext-container">
+                    <a href="forgotpassword.php" id="fgtpass-hypertext">Forgot Password? </a>
+                </div>
+                <input type="submit" id="submit-btn" value="Sign In" name="submit" disabled>
+                <div id="newuser-hypertext-container">
                     <a href="signup.php" id="newuser-hypertext">I'm a new user</a>
                 </div>
             </form>
