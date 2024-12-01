@@ -2,23 +2,66 @@
 session_start();
 include("../include/database.php");
 
-if(isset($_POST["submit"])){
+//Import PHPMailer classes into the global namespace
+//These must be at the top of your script, not inside a function
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+if (isset($_POST["submit"])) {
     $email = $_POST["email"];
 
-    $sql = "SELECT id FROM user_info WHERE email = '$email'";
-    $result = mysqli_query($connection, $sql);
-    $valuereturned = mysqli_fetch_column($result);
+    if (str_contains($email, "gmail.com") || str_contains($email, "yahoo.com") || str_contains($email, "hotmail.com")) {}
 
-    if(mysqli_num_rows($result) == 0){
+    $sql = "SELECT id,name FROM user_info WHERE email = '$email'";
+    $result = mysqli_query($connection, $sql);
+    $valuereturned = mysqli_fetch_assoc($result);
+
+    if (mysqli_num_rows($result) == 0) {
         echo "<script>alert('Account not found.');</script>";
-    }else{
-        $_SESSION["email"]=$email;
-        header("Location: verify.php");
+    } else {
+        $_SESSION["action"] = "fgt-pass";
+        $_SESSION["userid"] = $valuereturned["id"];
+        $verificationcode = rand(1000, 9999);
+        $_SESSION["verificationcode"] = $verificationcode;
+
+        //Load Composer's autoloader
+        require '../vendor/autoload.php';
+
+        //Create an instance; passing `true` enables exceptions
+        $mail = new PHPMailer(true);
+
+        try {
+            //Server settings
+            $mail->isSMTP();                                            //Send using SMTP
+            $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+            $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+            $mail->Username   = 'lamyongqin@gmail.com';                     //SMTP username
+            $mail->Password   = 'iqqaycqzbjclatjs';                               //SMTP password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;            //Enable implicit TLS encryption
+            $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+            //Recipients
+            $mail->setFrom('lamyongqin@gmail.com', 'Healthsync Clinic');
+            $mail->addAddress($email, $valuereturned["name"]);     //Add a recipient
+            //Content
+            $mail->isHTML(true);                                  //Set email format to HTML
+            $mail->Subject = 'Verification code for password reset';
+            $mail->Body    = "Only one step left to reset your password. Please use this verification code:  <br> <b>$verificationcode</b>";
+
+            if ($mail->send()) {
+                echo "<script>alert('Verification code has been send to $email.');</script>";
+                header("Location: verify.php");
+            }
+        } catch (Exception $e) {
+            echo "<script>alert('Message could not be sent. Mailer Error: {$mail->ErrorInfo}');</script>";
+        }
     }
 }
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 
 <head>
     <meta charset="UTF-8">
@@ -53,7 +96,7 @@ if(isset($_POST["submit"])){
             border: 1px solid grey;
             font-family: Roboto;
             font-size: 1.0rem;
-            padding-left: 2.5%;
+            padding-left: 1.0%;
         }
 
         #heading {
@@ -128,10 +171,11 @@ if(isset($_POST["submit"])){
     let emailfilled = false;
 
     email.addEventListener("input", checkemail);
+    email.addEventListener("input", tolower);
 
     function checkemail() {
         if (email.value.length > 0) {
-            emailfilled = true
+            emailfilled = true;
         } else {
             emailfilled = false;
             submit.disabled = true;
@@ -145,6 +189,10 @@ if(isset($_POST["submit"])){
             submit.addEventListener("mouseover", hover);
             submit.addEventListener("mouseout", unhover);
         }
+    }
+
+    function tolower() {
+        this.value = this.value.toLowerCase();
     }
 
     function hover() {

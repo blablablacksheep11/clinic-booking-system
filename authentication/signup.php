@@ -1,4 +1,5 @@
 <?php
+session_start();
 include("../include/database.php");
 
 if (isset($_POST["submit"])) {
@@ -27,7 +28,7 @@ if (isset($_POST["submit"])) {
         $sql = "INSERT INTO user_info (name, dob, email, contact_number, ic_number,password) VALUES ('$name','$dob','$email','$contactnumber','$icnumber','$hashedpassword')";
         mysqli_query($connection, $sql);
         echo "<script>alert('Account created.');</script>";
-        header("Location: signin.php");
+        echo "<script>window.location.replace('signin.php');</script>";
     }
 }
 ?>
@@ -235,8 +236,10 @@ if (isset($_POST["submit"])) {
         let confirmpasswordfilled = false;
 
         name.addEventListener("input", checkname);
+        name.addEventListener("input", toupper);
         dob.addEventListener("input", checkdob);
         email.addEventListener("input", checkemail);
+        email.addEventListener("input", tolower);
         contactnumber.addEventListener("input", checkcontactnumber);
         icnumber.addEventListener("input", checkicnumber);
         password.addEventListener("input", checkpassword);
@@ -244,7 +247,7 @@ if (isset($_POST["submit"])) {
 
         function checkname() {
             if (name.value.length > 0) {
-                namefilled = true
+                namefilled = true;
             } else {
                 namefilled = false;
                 submit.disabled = true;
@@ -262,7 +265,7 @@ if (isset($_POST["submit"])) {
 
         function checkdob() {
             if (dob.value.length > 0) {
-                dobfilled = true
+                dobfilled = true;
             } else {
                 dobfilled = false;
                 submit.disabled = true;
@@ -280,7 +283,7 @@ if (isset($_POST["submit"])) {
 
         function checkemail() {
             if (email.value.length > 0) {
-                emailfilled = true
+                emailfilled = true;
             } else {
                 emailfilled = false;
                 submit.disabled = true;
@@ -298,7 +301,7 @@ if (isset($_POST["submit"])) {
 
         function checkcontactnumber() {
             if (contactnumber.value.length > 0) {
-                contactnumberfilled = true
+                contactnumberfilled = true;
             } else {
                 contactnumberfilled = false;
                 submit.disabled = true;
@@ -316,7 +319,7 @@ if (isset($_POST["submit"])) {
 
         function checkicnumber() {
             if (icnumber.value.length > 0) {
-                icnumberfilled = true
+                icnumberfilled = true;
             } else {
                 icnumberfilled = false;
                 submit.disabled = true;
@@ -334,7 +337,7 @@ if (isset($_POST["submit"])) {
 
         function checkpassword() {
             if (password.value.length > 0) {
-                passwordfilled = true
+                passwordfilled = true;
             } else {
                 passwordfilled = false;
                 submit.disabled = true;
@@ -352,7 +355,7 @@ if (isset($_POST["submit"])) {
 
         function checkconfirmpassword() {
             if (confirmpassword.value.length > 0) {
-                confirmpasswordfilled = true
+                confirmpasswordfilled = true;
             } else {
                 confirmpasswordfilled = false;
                 submit.disabled = true;
@@ -366,6 +369,14 @@ if (isset($_POST["submit"])) {
                 submit.addEventListener("mouseover", hover);
                 submit.addEventListener("mouseout", unhover);
             }
+        }
+
+        function tolower(){
+            this.value = this.value.toLowerCase();
+        }
+
+        function toupper(){
+            this.value = this.value.toUpperCase();
         }
 
         function hover() {

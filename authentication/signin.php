@@ -5,18 +5,48 @@ if (isset($_POST["submit"])) {
     $email = $_POST["email"];
     $password = $_POST["password"];
 
-    $sql = "SELECT password FROM user_info WHERE email = '$email'";
-    $result = mysqli_query($connection, $sql);
-    $valuereturned = mysqli_fetch_assoc($result);
+    if (str_contains($email, "gmail.com") || str_contains($email, "yahoo.com") || str_contains($email, "hotmail.com")) {
+        $sql = "SELECT password FROM user_info WHERE email = '$email'";
+        $result = mysqli_query($connection, $sql);
+        $valuereturned = mysqli_fetch_column($result);
 
-    if (mysqli_num_rows($result) == 1) {
-        if (password_verify($password, $valuereturned["password"])) {
-            header("Location: ../patient/home.php");
+        if (mysqli_num_rows($result) == 1) {
+            if (password_verify($password, $valuereturned["password"])) {
+                header("Location: ../patient/home.php");
+            } else {
+                echo "<script>alert('Invalid password.');</script>";
+            }
         } else {
-            echo "<script>alert('Invalid password.');</script>";
+            echo "<script>alert('Account not found.');</script>";
+        }
+    } else if (str_contains($email, "healthsync.com")) {
+        //check for doctor
+        $sql1 = "SELECT password FROM doctor_info WHERE email = '$email'";
+        $result1 = mysqli_query($connection, $sql1);
+        $valuereturned1 = mysqli_fetch_column($result1);
+
+        //check for admin
+        $sql2 = "SELECT password FROM admin_info WHERE email = '$email'";
+        $result2 = mysqli_query($connection, $sql2);
+        $valuereturned2 = mysqli_fetch_column($result2);
+
+        if (mysqli_num_rows($result1) == 1) {
+            if (password_verify($password, $valuereturned1["password"])) {
+                header("Location: ../doctor/home.php");
+            } else {
+                echo "<script>alert('Invalid password.');</script>";
+            }
+        } else if (mysqli_num_rows($result2) == 1) {
+            if (password_verify($password, $valuereturned2["password"])) {
+                header("Location: ../admin/home.php");
+            } else {
+                echo "<script>alert('Invalid password.');</script>";
+            }
+        } else {
+            echo "<script>alert('Account not found.');</script>";
         }
     } else {
-        echo "<script>alert('Account not found.');</script>";
+        echo "<script>alert('Invalid email address.');</script>";
     }
 }
 ?>
@@ -193,11 +223,12 @@ if (isset($_POST["submit"])) {
         let passwordfilled = false;
 
         email.addEventListener("input", checkemail);
+        email.addEventListener("input", tolower);
         password.addEventListener("input", checkpassword);
 
         function checkemail() {
             if (email.value.length > 0) {
-                emailfilled = true
+                emailfilled = true;
             } else {
                 emailfilled = false;
                 submit.disabled = true;
@@ -215,7 +246,7 @@ if (isset($_POST["submit"])) {
 
         function checkpassword() {
             if (password.value.length > 0) {
-                passwordfilled = true
+                passwordfilled = true;
             } else {
                 passwordfilled = false;
                 submit.disabled = true;
@@ -229,6 +260,10 @@ if (isset($_POST["submit"])) {
                 submit.addEventListener("mouseover", hover);
                 submit.addEventListener("mouseout", unhover);
             }
+        }
+
+        function tolower() {
+            this.value = this.value.toLowerCase();
         }
 
         function hover() {
