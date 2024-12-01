@@ -8,54 +8,88 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
+function sendemail()
+{
+    //Load Composer's autoloader
+    require '../vendor/autoload.php';
+
+    //Create an instance; passing `true` enables exceptions
+    $mail = new PHPMailer(true);
+
+    try {
+        //Server settings
+        $mail->isSMTP();                                            //Send using SMTP
+        $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+        $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+        $mail->Username   = 'lamyongqin@gmail.com';                     //SMTP username
+        $mail->Password   = 'iqqaycqzbjclatjs';                               //SMTP password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;            //Enable implicit TLS encryption
+        $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+        //Recipients
+        $mail->setFrom('lamyongqin@gmail.com', 'Healthsync Clinic');
+        $mail->addAddress($_SESSION["mailto"]);     //Add a recipient
+        //Content
+        $mail->isHTML(true);                                  //Set email format to HTML
+        $mail->Subject = 'Verification code for password reset';
+        $mail->Body    = "Only one step left to reset your password. Please use this verification code:  <br> <b>" . $_SESSION["verificationcode"] . "</b>";
+
+        if ($mail->send()) {
+            echo "<script>alert('Verification code has been send to " . $_SESSION["mailto"] . "');</script>";
+            echo "<script>window.location.replace('verify.php');</script>";
+        }
+    } catch (Exception $e) {
+        echo "<script>alert('Message could not be sent. Mailer Error: {$mail->ErrorInfo}');</script>";
+    }
+}
+
 if (isset($_POST["submit"])) {
     $email = $_POST["email"];
+    $_SESSION["mailto"] = $email;
 
-    if (str_contains($email, "gmail.com") || str_contains($email, "yahoo.com") || str_contains($email, "hotmail.com")) {}
+    if (str_contains($email, "gmail.com") || str_contains($email, "yahoo.com") || str_contains($email, "hotmail.com")) {
+        $sql = "SELECT id FROM patient_info WHERE email = '$email'";
+        $result = mysqli_query($connection, $sql);
+        $valuereturned = mysqli_fetch_assoc($result);
 
-    $sql = "SELECT id,name FROM user_info WHERE email = '$email'";
-    $result = mysqli_query($connection, $sql);
-    $valuereturned = mysqli_fetch_assoc($result);
-
-    if (mysqli_num_rows($result) == 0) {
-        echo "<script>alert('Account not found.');</script>";
-    } else {
-        $_SESSION["action"] = "fgt-pass";
-        $_SESSION["userid"] = $valuereturned["id"];
-        $verificationcode = rand(1000, 9999);
-        $_SESSION["verificationcode"] = $verificationcode;
-
-        //Load Composer's autoloader
-        require '../vendor/autoload.php';
-
-        //Create an instance; passing `true` enables exceptions
-        $mail = new PHPMailer(true);
-
-        try {
-            //Server settings
-            $mail->isSMTP();                                            //Send using SMTP
-            $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
-            $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-            $mail->Username   = 'lamyongqin@gmail.com';                     //SMTP username
-            $mail->Password   = 'iqqaycqzbjclatjs';                               //SMTP password
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;            //Enable implicit TLS encryption
-            $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-
-            //Recipients
-            $mail->setFrom('lamyongqin@gmail.com', 'Healthsync Clinic');
-            $mail->addAddress($email, $valuereturned["name"]);     //Add a recipient
-            //Content
-            $mail->isHTML(true);                                  //Set email format to HTML
-            $mail->Subject = 'Verification code for password reset';
-            $mail->Body    = "Only one step left to reset your password. Please use this verification code:  <br> <b>$verificationcode</b>";
-
-            if ($mail->send()) {
-                echo "<script>alert('Verification code has been send to $email.');</script>";
-                header("Location: verify.php");
-            }
-        } catch (Exception $e) {
-            echo "<script>alert('Message could not be sent. Mailer Error: {$mail->ErrorInfo}');</script>";
+        if (mysqli_num_rows($result) == 0) {
+            echo "<script>alert('Account not found.');</script>";
+        } else {
+            $_SESSION["entity"] = "patient";
+            $_SESSION["action"] = "fgt-pass";
+            $_SESSION["userid"] = $valuereturned["id"];
+            $verificationcode = rand(1000, 9999);
+            $_SESSION["verificationcode"] = $verificationcode;
+            sendemail();
         }
+    } else if (str_contains($email, "segi4u.my")) {
+        $sql1 = "SELECT id FROM doctor_info WHERE email = '$email'";
+        $result1 = mysqli_query($connection, $sql1);
+        $valuereturned1 = mysqli_fetch_assoc($result1);
+
+        $sql2 = "SELECT id FROM admin_info WHERE email = '$email'";
+        $result2 = mysqli_query($connection, $sql2);
+        $valuereturned2 = mysqli_fetch_assoc($result2);
+
+        if (mysqli_num_rows($result1) == 1) {
+            $_SESSION["entity"] = "doctor";
+            $_SESSION["action"] = "fgt-pass";
+            $_SESSION["userid"] = $valuereturned1["id"];
+            $verificationcode = rand(1000, 9999);
+            $_SESSION["verificationcode"] = $verificationcode;
+            sendemail();
+        } else if (mysqli_num_rows($result2) == 1) {
+            $_SESSION["entity"] = "admin";
+            $_SESSION["action"] = "fgt-pass";
+            $_SESSION["userid"] = $valuereturned2["id"];
+            $verificationcode = rand(1000, 9999);
+            $_SESSION["verificationcode"] = $verificationcode;
+            sendemail();
+        } else {
+            echo "<script>alert('Account not found.');</script>";
+        }
+    } else {
+        echo "<script>alert('Invalid email address.');</script>";
     }
 }
 ?>

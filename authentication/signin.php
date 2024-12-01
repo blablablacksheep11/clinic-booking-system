@@ -6,9 +6,9 @@ if (isset($_POST["submit"])) {
     $password = $_POST["password"];
 
     if (str_contains($email, "gmail.com") || str_contains($email, "yahoo.com") || str_contains($email, "hotmail.com")) {
-        $sql = "SELECT password FROM user_info WHERE email = '$email'";
+        $sql = "SELECT password FROM patient_info WHERE email = '$email'";
         $result = mysqli_query($connection, $sql);
-        $valuereturned = mysqli_fetch_column($result);
+        $valuereturned = mysqli_fetch_assoc($result);
 
         if (mysqli_num_rows($result) == 1) {
             if (password_verify($password, $valuereturned["password"])) {
@@ -19,16 +19,16 @@ if (isset($_POST["submit"])) {
         } else {
             echo "<script>alert('Account not found.');</script>";
         }
-    } else if (str_contains($email, "healthsync.com")) {
+    } else if (str_contains($email, "segi4u.my")) {
         //check for doctor
         $sql1 = "SELECT password FROM doctor_info WHERE email = '$email'";
         $result1 = mysqli_query($connection, $sql1);
-        $valuereturned1 = mysqli_fetch_column($result1);
+        $valuereturned1 = mysqli_fetch_assoc($result1);
 
         //check for admin
         $sql2 = "SELECT password FROM admin_info WHERE email = '$email'";
         $result2 = mysqli_query($connection, $sql2);
-        $valuereturned2 = mysqli_fetch_column($result2);
+        $valuereturned2 = mysqli_fetch_assoc($result2);
 
         if (mysqli_num_rows($result1) == 1) {
             if (password_verify($password, $valuereturned1["password"])) {

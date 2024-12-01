@@ -11,7 +11,20 @@ if (isset($_POST["submit"])) {
     $verificationcode = $code1 . $code2 . $code3 . $code4;
 
     if ($verificationcode == $verificationcodetomatch) {
-        header("Location: resetpass.php");
+        if ($_SESSION["action"] == "fgt-pass") {
+            echo "<script>window.location.href = 'resetpass.php';</script>";
+        } else if ($_SESSION["action"] == "signup") {
+            $name = $_SESSION["name"];
+            $dob = $_SESSION["dob"];
+            $email = $_SESSION["email"];
+            $contactnumber = $_SESSION["contactnumber"];
+            $icnumber = $_SESSION["icnumber"];
+            $password = $_SESSION["password"];
+            $sql = "INSERT INTO patient_info (name, dob, email, contact_number, ic_number,password) VALUES ('$name','$dob','$email','$contactnumber','$icnumber','$password')";
+            mysqli_query($connection, $sql);
+            echo "<script>alert('Account created.');</script>";
+            echo "<script>window.location.replace('signin.php');</script>";
+        }
     } else {
         echo "<script>alert('Invalid verification code.');</script>";
     }
@@ -120,7 +133,13 @@ if (isset($_POST["submit"])) {
 </head>
 
 <body>
-    <a href="forgotpassword.php" id="back-hypertext">Back</a>
+    <?php
+    if ($_SESSION["action"] == "fgt-pass") {
+        echo "<a href='forgotpassword.php' id='back-hypertext'>Back</a>";
+    } else if ($_SESSION["action"] == "signup") {
+        echo "<a href='signup.php' id='back-hypertext'>Back</a>";
+    }
+    ?>
     <p id="heading">Check&nbsp;&nbsp;your&nbsp;&nbsp;email</p>
     <p id="description">Enter the verification code that has been send to your email</p>
     <div id="form-container">

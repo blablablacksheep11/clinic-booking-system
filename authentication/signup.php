@@ -2,6 +2,47 @@
 session_start();
 include("../include/database.php");
 
+//Import PHPMailer classes into the global namespace
+//These must be at the top of your script, not inside a function
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+function sendemail()
+{
+    //Load Composer's autoloader
+    require '../vendor/autoload.php';
+
+    //Create an instance; passing `true` enables exceptions
+    $mail = new PHPMailer(true);
+
+    try {
+        //Server settings
+        $mail->isSMTP();                                            //Send using SMTP
+        $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+        $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+        $mail->Username   = 'lamyongqin@gmail.com';                     //SMTP username
+        $mail->Password   = 'iqqaycqzbjclatjs';                               //SMTP password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;            //Enable implicit TLS encryption
+        $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+        //Recipients
+        $mail->setFrom('lamyongqin@gmail.com', 'Healthsync Clinic');
+        $mail->addAddress($_SESSION["mailto"]);     //Add a recipient
+        //Content
+        $mail->isHTML(true);                                  //Set email format to HTML
+        $mail->Subject = 'Verification code for password reset';
+        $mail->Body    = "Only one step left to reset your password. Please use this verification code:  <br> <b>" . $_SESSION["verificationcode"] . "</b>";
+
+        if ($mail->send()) {
+            echo "<script>alert('Verification code has been send to " . $_SESSION["mailto"] . "');</script>";
+            echo "<script>window.location.replace('verify.php');</script>";
+        }
+    } catch (Exception $e) {
+        echo "<script>alert('Message could not be sent. Mailer Error: {$mail->ErrorInfo}');</script>";
+    }
+}
+
 if (isset($_POST["submit"])) {
     $name = $_POST["name"];
     $dob = $_POST["dob"];
@@ -11,9 +52,9 @@ if (isset($_POST["submit"])) {
     $password = $_POST["password"];
     $confirmpassword = $_POST["confirmpassword"];
 
-    $sql1 = "SELECT * FROM user_info WHERE ic_number = '$icnumber'";
+    $sql1 = "SELECT * FROM patient_info WHERE ic_number = '$icnumber'";
     $result1 = mysqli_query($connection, $sql1);
-    $sql2 = "SELECT * FROM user_info WHERE email = '$email'";
+    $sql2 = "SELECT * FROM patient_info WHERE email = '$email'";
     $result2 = mysqli_query($connection, $sql2);
 
     if (mysqli_num_rows($result2) > 0) {
@@ -24,11 +65,17 @@ if (isset($_POST["submit"])) {
         echo "<script>alert('The password and confirm-password must be the same.');</script>";
     } else {
         $hashedpassword = password_hash($password, PASSWORD_BCRYPT);
-
-        $sql = "INSERT INTO user_info (name, dob, email, contact_number, ic_number,password) VALUES ('$name','$dob','$email','$contactnumber','$icnumber','$hashedpassword')";
-        mysqli_query($connection, $sql);
-        echo "<script>alert('Account created.');</script>";
-        echo "<script>window.location.replace('signin.php');</script>";
+        $_SESSION["name"] = $name;
+        $_SESSION["dob"] = $dob;
+        $_SESSION["email"] = $email;
+        $_SESSION["mailto"] = $email;
+        $_SESSION["contactnumber"] = $contactnumber;
+        $_SESSION["icnumber"] = $icnumber;
+        $_SESSION["password"] = $hashedpassword;
+        $_SESSION["action"] = "signup";
+        $verificationcode = rand(1000, 9999);
+        $_SESSION["verificationcode"] = $verificationcode;
+        sendemail();
     }
 }
 ?>
@@ -371,11 +418,11 @@ if (isset($_POST["submit"])) {
             }
         }
 
-        function tolower(){
+        function tolower() {
             this.value = this.value.toLowerCase();
         }
 
-        function toupper(){
+        function toupper() {
             this.value = this.value.toUpperCase();
         }
 

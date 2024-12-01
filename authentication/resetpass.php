@@ -3,6 +3,7 @@ session_start();
 include("../include/database.php");
 
 if (isset($_POST["submit"])) {
+    $entity = $_SESSION["entity"];
     $userid = $_SESSION["userid"];
     $password = $_POST["password"];
     $confirmpassword = $_POST["confirmpassword"];
@@ -10,7 +11,7 @@ if (isset($_POST["submit"])) {
     if ($password == $confirmpassword) {
         $hashedpassword = password_hash($password, PASSWORD_BCRYPT);
 
-        $sql = "UPDATE user_info SET password = '$hashedpassword' WHERE id = '$userid'";
+        $sql = "UPDATE `{$entity}_info` SET password = '$hashedpassword' WHERE id = '$userid'";
         mysqli_query($connection, $sql);
         echo "<script>alert('Password updated.');</script>";
         echo "<script>window.location.replace('signin.php');</script>";
