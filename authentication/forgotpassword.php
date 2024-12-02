@@ -47,45 +47,56 @@ if (isset($_POST["submit"])) {
     $email = $_POST["email"];
     $_SESSION["mailto"] = $email;
 
-    if (str_contains($email, "gmail.com") || str_contains($email, "yahoo.com") || str_contains($email, "hotmail.com")) {
+    if (str_contains($email, "gmail.com") || str_contains($email, "yahoo.com") || str_contains($email, "hotmail.com") || str_contains($email, "segi4u.my") || str_contains($email, "segi.edu.my")) {
+
+        //search from patient table
         $sql = "SELECT id FROM patient_info WHERE email = '$email'";
         $result = mysqli_query($connection, $sql);
         $valuereturned = mysqli_fetch_assoc($result);
 
-        if (mysqli_num_rows($result) == 0) {
-            echo "<script>alert('Account not found.');</script>";
-        } else {
+        //search form doctor table
+        $sql1 = "SELECT id FROM doctor_info WHERE email = '$email'";
+        $result1 = mysqli_query($connection, $sql1);
+        $valuereturned1 = mysqli_fetch_assoc($result1);
+
+        //search from admin table
+        $sql2 = "SELECT id FROM admin_info WHERE email = '$email'";
+        $result2 = mysqli_query($connection, $sql2);
+        $valuereturned2 = mysqli_fetch_assoc($result2);
+
+        //if email is found in patient tables
+        if (mysqli_num_rows($result) == 1) {
             $_SESSION["entity"] = "patient";
             $_SESSION["action"] = "fgt-pass";
             $_SESSION["userid"] = $valuereturned["id"];
             $verificationcode = rand(1000, 9999);
             $_SESSION["verificationcode"] = $verificationcode;
             sendemail();
-        }
-    } else if (str_contains($email, "segi4u.my")) {
-        $sql1 = "SELECT id FROM doctor_info WHERE email = '$email'";
-        $result1 = mysqli_query($connection, $sql1);
-        $valuereturned1 = mysqli_fetch_assoc($result1);
+            echo "<script>alert('Account not found.');</script>";
+        } 
 
-        $sql2 = "SELECT id FROM admin_info WHERE email = '$email'";
-        $result2 = mysqli_query($connection, $sql2);
-        $valuereturned2 = mysqli_fetch_assoc($result2);
-
-        if (mysqli_num_rows($result1) == 1) {
+        //if email is found in doctor table
+         else if (mysqli_num_rows($result1) == 1) {
             $_SESSION["entity"] = "doctor";
             $_SESSION["action"] = "fgt-pass";
             $_SESSION["userid"] = $valuereturned1["id"];
             $verificationcode = rand(1000, 9999);
             $_SESSION["verificationcode"] = $verificationcode;
             sendemail();
-        } else if (mysqli_num_rows($result2) == 1) {
+        } 
+        
+        //if email is found in admin table
+        else if (mysqli_num_rows($result2) == 1) {
             $_SESSION["entity"] = "admin";
             $_SESSION["action"] = "fgt-pass";
             $_SESSION["userid"] = $valuereturned2["id"];
             $verificationcode = rand(1000, 9999);
             $_SESSION["verificationcode"] = $verificationcode;
             sendemail();
-        } else {
+        } 
+        
+        //if email is not found in any table
+        else {
             echo "<script>alert('Account not found.');</script>";
         }
     } else {

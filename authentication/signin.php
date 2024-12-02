@@ -5,21 +5,12 @@ if (isset($_POST["submit"])) {
     $email = $_POST["email"];
     $password = $_POST["password"];
 
-    if (str_contains($email, "gmail.com") || str_contains($email, "yahoo.com") || str_contains($email, "hotmail.com")) {
+    if (str_contains($email, "gmail.com") || str_contains($email, "yahoo.com") || str_contains($email, "hotmail.com") || str_contains($email, "segi4u.my") || str_contains($email, "segi.edu.my")) {
+        //check for patient
         $sql = "SELECT password FROM patient_info WHERE email = '$email'";
         $result = mysqli_query($connection, $sql);
         $valuereturned = mysqli_fetch_assoc($result);
 
-        if (mysqli_num_rows($result) == 1) {
-            if (password_verify($password, $valuereturned["password"])) {
-                header("Location: ../patient/home.php");
-            } else {
-                echo "<script>alert('Invalid password.');</script>";
-            }
-        } else {
-            echo "<script>alert('Account not found.');</script>";
-        }
-    } else if (str_contains($email, "segi4u.my")) {
         //check for doctor
         $sql1 = "SELECT password FROM doctor_info WHERE email = '$email'";
         $result1 = mysqli_query($connection, $sql1);
@@ -30,19 +21,35 @@ if (isset($_POST["submit"])) {
         $result2 = mysqli_query($connection, $sql2);
         $valuereturned2 = mysqli_fetch_assoc($result2);
 
-        if (mysqli_num_rows($result1) == 1) {
+        //if email is found in patient table
+        if (mysqli_num_rows($result) == 1) {
+            if (password_verify($password, $valuereturned["password"])) {
+                header("Location: ../patient/home.php");
+            } else {
+                echo "<script>alert('Invalid password.');</script>";
+            }
+        }
+
+        //if email is found in doctor table
+        else if (mysqli_num_rows($result1) == 1) {
             if (password_verify($password, $valuereturned1["password"])) {
                 header("Location: ../doctor/home.php");
             } else {
                 echo "<script>alert('Invalid password.');</script>";
             }
-        } else if (mysqli_num_rows($result2) == 1) {
+        } 
+        
+        //if email is found in admin table
+        else if (mysqli_num_rows($result2) == 1) {
             if (password_verify($password, $valuereturned2["password"])) {
                 header("Location: ../admin/home.php");
             } else {
                 echo "<script>alert('Invalid password.');</script>";
             }
-        } else {
+        } 
+        
+        //if email is not found in any table
+        else {
             echo "<script>alert('Account not found.');</script>";
         }
     } else {

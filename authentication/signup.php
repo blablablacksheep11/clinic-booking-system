@@ -56,26 +56,38 @@ if (isset($_POST["submit"])) {
     $result1 = mysqli_query($connection, $sql1);
     $sql2 = "SELECT * FROM patient_info WHERE email = '$email'";
     $result2 = mysqli_query($connection, $sql2);
+    $sql3 = "SELECT * FROM doctor_info WHERE email = '$email'";
+    $result3 = mysqli_query($connection, $sql3);
+    $sql4 = "SELECT * FROM admin_info WHERE email = '$email'";
+    $result4 = mysqli_query($connection, $sql4);
 
     if (mysqli_num_rows($result2) > 0) {
+        echo "<script>alert('This email already registered.')</script>";
+    } else if (mysqli_num_rows($result3) > 0) {
+        echo "<script>alert('This email already registered.')</script>";
+    } else if (mysqli_num_rows($result4) > 0) {
         echo "<script>alert('This email already registered.')</script>";
     } else if (mysqli_num_rows($result1) > 0) {
         echo "<script>alert('This IC number already registered.')</script>";
     } else if ($password != $confirmpassword) {
         echo "<script>alert('The password and confirm-password must be the same.');</script>";
     } else {
-        $hashedpassword = password_hash($password, PASSWORD_BCRYPT);
-        $_SESSION["name"] = $name;
-        $_SESSION["dob"] = $dob;
-        $_SESSION["email"] = $email;
-        $_SESSION["mailto"] = $email;
-        $_SESSION["contactnumber"] = $contactnumber;
-        $_SESSION["icnumber"] = $icnumber;
-        $_SESSION["password"] = $hashedpassword;
-        $_SESSION["action"] = "signup";
-        $verificationcode = rand(1000, 9999);
-        $_SESSION["verificationcode"] = $verificationcode;
-        sendemail();
+        if (str_contains($email, "gmail.com") || str_contains($email, "yahoo.com") || str_contains($email, "hotmail.com") || str_contains($email, "segi4u.my") || str_contains($email, "segi.edu.my")) {
+            $hashedpassword = password_hash($password, PASSWORD_BCRYPT);
+            $_SESSION["name"] = $name;
+            $_SESSION["dob"] = $dob;
+            $_SESSION["email"] = $email;
+            $_SESSION["mailto"] = $email;
+            $_SESSION["contactnumber"] = $contactnumber;
+            $_SESSION["icnumber"] = $icnumber;
+            $_SESSION["password"] = $hashedpassword;
+            $_SESSION["action"] = "signup";
+            $verificationcode = rand(1000, 9999);
+            $_SESSION["verificationcode"] = $verificationcode;
+            sendemail();
+        } else {
+            echo "<script>alert('Invalid email address.');</script>";
+        }
     }
 }
 ?>

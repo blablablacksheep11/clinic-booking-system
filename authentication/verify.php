@@ -21,9 +21,16 @@ if (isset($_POST["submit"])) {
             $icnumber = $_SESSION["icnumber"];
             $password = $_SESSION["password"];
             $sql = "INSERT INTO patient_info (name, dob, email, contact_number, ic_number,password) VALUES ('$name','$dob','$email','$contactnumber','$icnumber','$password')";
-            mysqli_query($connection, $sql);
-            echo "<script>alert('Account created.');</script>";
-            echo "<script>window.location.replace('signin.php');</script>";
+            if (mysqli_query($connection, $sql)) {
+                unset($_SESSION["name"]);
+                unset($_SESSION["dob"]);
+                unset($_SESSION["email"]);
+                unset($_SESSION["contactnumber"]);
+                unset($_SESSION["icnumber"]);
+                unset($_SESSION["password"]);
+                echo "<script>alert('Account created.');</script>";
+                echo "<script>window.location.replace('signin.php');</script>";
+            }
         }
     } else {
         echo "<script>alert('Invalid verification code.');</script>";
