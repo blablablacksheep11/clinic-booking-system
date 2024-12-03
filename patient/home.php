@@ -69,7 +69,7 @@ unset($_SESSION["doctorgetted"]);
             left: -10%;
         }
 
-        #create-btn {
+        #view-btn {
             position: absolute;
             height: 8%;
             width: 13%;
@@ -82,7 +82,7 @@ unset($_SESSION["doctorgetted"]);
             font-family: Roboto;
         }
 
-        #create-btn:hover {
+        #view-btn:hover {
             background-color: #84c8e8;
         }
 
@@ -120,7 +120,7 @@ unset($_SESSION["doctorgetted"]);
     <div id="img-container">
         <img src="../pic/clinicbuilding2.jpg" id="img">
     </div>
-    <button id="create-btn">Create New Appointment</button>
+    <button id="view-btn">Create New Appointment</button>
 </body>
 <script>
     document.getElementById("create-btn").addEventListener("click", function() {

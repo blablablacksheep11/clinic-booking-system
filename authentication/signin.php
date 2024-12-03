@@ -1,30 +1,35 @@
 <?php
+session_start();
 include("../include/database.php");
 
 if (isset($_POST["submit"])) {
     $email = $_POST["email"];
     $password = $_POST["password"];
 
-    if (str_contains($email, "gmail.com") || str_contains($email, "yahoo.com") || str_contains($email, "hotmail.com") || str_contains($email, "segi4u.my") || str_contains($email, "segi.edu.my")) {
+    if (str_contains($email, "gmail.com") || str_contains($email, "outlook.com") || str_contains($email, "hotmail.com") || str_contains($email, "segi4u.my") || str_contains($email, "segi.edu.my")) {
         //check for patient
-        $sql = "SELECT password FROM patient_info WHERE email = '$email'";
+        $sql = "SELECT id,name,password FROM patient_info WHERE email = '$email'";
         $result = mysqli_query($connection, $sql);
         $valuereturned = mysqli_fetch_assoc($result);
 
         //check for doctor
-        $sql1 = "SELECT password FROM doctor_info WHERE email = '$email'";
+        $sql1 = "SELECT id,name,password FROM doctor_info WHERE email = '$email'";
         $result1 = mysqli_query($connection, $sql1);
         $valuereturned1 = mysqli_fetch_assoc($result1);
 
         //check for admin
-        $sql2 = "SELECT password FROM admin_info WHERE email = '$email'";
+        $sql2 = "SELECT id,name,password FROM admin_info WHERE email = '$email'";
         $result2 = mysqli_query($connection, $sql2);
         $valuereturned2 = mysqli_fetch_assoc($result2);
 
         //if email is found in patient table
         if (mysqli_num_rows($result) == 1) {
             if (password_verify($password, $valuereturned["password"])) {
-                header("Location: ../patient/home.php");
+                $_SESSION["entity"] = "patient";
+                $_SESSION["patientid"] = $valuereturned["id"];
+                $_SESSION["patientemail"] = $valuereturned["email"];
+                $_SESSION["patientname"] = $valuereturned["name"];
+                echo "<script>window.location.href = '../patient/home.php';</script>";
             } else {
                 echo "<script>alert('Invalid password.');</script>";
             }
@@ -33,7 +38,11 @@ if (isset($_POST["submit"])) {
         //if email is found in doctor table
         else if (mysqli_num_rows($result1) == 1) {
             if (password_verify($password, $valuereturned1["password"])) {
-                header("Location: ../doctor/home.php");
+                $_SESSION["entity"] = "doctor";
+                $_SESSION["doctorid"] = $valuereturned1["id"];
+                $_SESSION["doctoremail"] = $valuereturned1["email"];
+                $_SESSION["doctorname"] = $valuereturned1["name"];
+                echo "<script>window.location.href = '../doctor/home.php';</script>";
             } else {
                 echo "<script>alert('Invalid password.');</script>";
             }
@@ -42,7 +51,11 @@ if (isset($_POST["submit"])) {
         //if email is found in admin table
         else if (mysqli_num_rows($result2) == 1) {
             if (password_verify($password, $valuereturned2["password"])) {
-                header("Location: ../admin/home.php");
+                $_SESSION["entity"] = "admin";
+                $_SESSION["adminid"] = $valuereturned2["id"];
+                $_SESSION["adminemail"] = $valuereturned2["email"];
+                $_SESSION["adminname"] = $valuereturned2["name"];
+                echo "<script>window.location.href = '../admin/home.php';</script>";
             } else {
                 echo "<script>alert('Invalid password.');</script>";
             }
@@ -141,7 +154,7 @@ if (isset($_POST["submit"])) {
             height: 13%;
             top: 73%;
             left: 10%;
-            background-color: #b6def1;
+            background-color: #c9e6f3;
             color: white;
             border: none;
             border-radius: 5px;

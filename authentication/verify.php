@@ -2,6 +2,8 @@
 session_start();
 include("../include/database.php");
 
+echo "<script>console.log(".$_SESSION['verificationcode'].")</script>";
+
 if (isset($_POST["submit"])) {
     $code1 = $_POST["code1"];
     $code2 = $_POST["code2"];
@@ -29,7 +31,7 @@ if (isset($_POST["submit"])) {
                 unset($_SESSION["icnumber"]);
                 unset($_SESSION["password"]);
                 echo "<script>alert('Account created.');</script>";
-                echo "<script>window.location.replace('signin.php');</script>";
+                echo "<script>window.location.href = 'signin.php';</script>";
             }
         }
     } else {
@@ -129,7 +131,7 @@ if (isset($_POST["submit"])) {
             width: 10vw;
             top: 70%;
             margin: 0%;
-            background-color: #b6def1;
+            background-color: #c9e6f3;
             color: white;
             border: none;
             border-radius: 5px;

@@ -114,7 +114,7 @@ if (isset($_POST["submit"])) {
             top: 65%;
             left: 40%;
             margin: 0%;
-            background-color: #b6def1;
+            background-color: #c9e6f3;
             color: white;
             border: none;
             border-radius: 5px;

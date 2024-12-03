@@ -4,6 +4,61 @@ include("../include/database.php");
 include("../include/patient-navbar.php");
 unset($_SESSION["dategetted"]);
 unset($_SESSION["doctorgetted"]);
+
+//Import PHPMailer classes into the global namespace
+//These must be at the top of your script, not inside a function
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+if (isset($_POST["submit"])) {
+    $entity = $_SESSION["entity"];
+    $id = $_SESSION["patientid"];
+    $timeslot = $_SESSION["timeslot"];
+    $doctorid = $_SESSION["doctorid"];
+    $date = $_SESSION["date"];
+
+    $sql = "SELECT name FROM doctor_info WHERE id = '$doctorid'";
+    $result = mysqli_query($connection, $sql);
+    $doctorname = mysqli_fetch_assoc($result);
+    $sql = "INSERT INTO appointment(date, time, patient_id, doctor_id) VALUES ('$date', '$timeslot', '$id', '$doctorid')";
+    if (mysqli_query($connection, $sql)) {
+        $sql = "SELECT email, name FROM admin_info WHERE id = 1";
+        $result = mysqli_query($connection, $sql);
+        $valuereturned = mysqli_fetch_assoc($result);
+        //Load Composer's autoloader
+        require '../vendor/autoload.php';
+
+        //Create an instance; passing `true` enables exceptions
+        $mail = new PHPMailer(true);
+
+        try {
+            //Server settings
+            $mail->isSMTP();                                            //Send using SMTP
+            $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+            $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+            $mail->Username   = 'lamyongqin@gmail.com';                     //SMTP username
+            $mail->Password   = 'iqqaycqzbjclatjs';                               //SMTP password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;            //Enable implicit TLS encryption
+            $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+            //Recipients
+            $mail->setFrom('lamyongqin@gmail.com', $_SESSION["patientname"]);
+            $mail->addAddress($valuereturned["email"], $valuereturned["name"]);     //Add a recipient
+
+            //Content
+            $mail->isHTML(true);                                  //Set email format to HTML
+            $mail->Subject = 'Request to create appointment';
+            $mail->Body    = "Dear ".$valuereturned["name"].", <br><br><b>&nbsp;&nbsp;&nbsp;&nbsp;You have received an appointment request from ".$_SESSION["patientname"].", who wishes to book an appointment with Dr. ".$doctorname["name"]." on ".$date.", ".$timeslot.".</b>";
+
+            if($mail->send()){
+                echo "<script>alert('Your create appointment request has been sent. You will be notified once your request is accepted.');</script>";
+            }
+        } catch (Exception $e) {
+            echo "<script>alert('Message could not be sent. Mailer Error: {$mail->ErrorInfo}');</script>";
+        }
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -96,21 +151,28 @@ unset($_SESSION["doctorgetted"]);
             background-color: #6fd0ff;
         }
 
+        .timeslot-btn-selected {
+            font-family: Roboto;
+            width: 23%;
+            height: 75%;
+            background-color: #34BDFF;
+            color: white;
+            border: none;
+            border-radius: 10px;
+        }
+
         .submit-btn {
             position: absolute;
             height: 8%;
             width: 13%;
             top: 75%;
             left: 10%;
-            background-color: #9dd1ea;
+            background-color: #c9e6f3;
             color: white;
             border: none;
             border-radius: 10px;
             font-family: Roboto;
-        }
-
-        .submit-btn:hover {
-            background-color: #84c8e8;
+            display: none;
         }
 
         #heading {
@@ -216,7 +278,7 @@ unset($_SESSION["doctorgetted"]);
 <body>
     <h1 id="heading">Appointment</h1>
     <div id="form-container">
-        <form action="appointment.php">
+        <form>
             <label for="date-field" class="form-label">Date:</label>
             <br>
             <input type="date" class="form-field" id="date-field">
@@ -233,7 +295,7 @@ unset($_SESSION["doctorgetted"]);
                     <option value=<?php echo $row["id"]; ?>>Dr <?php echo $row["name"]; ?></option>
                 <?php
                 }
-                if(isset($_SESSION["doctorselected"])){
+                if (isset($_SESSION["doctorselected"])) {
                     $doctorid = $_SESSION["doctorid"];
                     echo "<script>document.getElementById('doctor-list').value = '$doctorid';</script>";
                 }
@@ -243,13 +305,19 @@ unset($_SESSION["doctorgetted"]);
     </div>
     <div id="doctor-container"></div>
     <div id="timeslot-container"></div>
-    <button class="submit-btn">Create Appointment</button>
+    <form action="appointment.php" method="post">
+        <input type="submit" class="submit-btn" id="submit-btn" value="Create Appointment" name="submit" disabled>
+    </form>
 
     <script>
         $(document).ready(function() {
             $("#doctor-container").load("load-doctor.php");
             $(document).on("change", "#doctor-list", function(e) {
                 e.preventDefault();
+                $("#submit-btn").prop("disabled", true);
+                $("#submit-btn").css("background-color", "#c9e6f3");
+                $(document).off("mouseover", "#submit-btn");
+                $(document).off("mouseout", "#submit-btn");
                 var doctorid = $("#doctor-list").val();
 
                 $.ajax({
@@ -267,6 +335,10 @@ unset($_SESSION["doctorgetted"]);
 
             $(document).on("change", "#date-field", function(e) {
                 e.preventDefault();
+                $("#submit-btn").prop("disabled", true);
+                $("#submit-btn").css("background-color", "#c9e6f3");
+                $(document).off("mouseover", "#submit-btn");
+                $(document).off("mouseout", "#submit-btn");
                 var date = $("#date-field").val();
 
                 $.ajax({
@@ -283,7 +355,36 @@ unset($_SESSION["doctorgetted"]);
 
             $(document).on("click", ".timeslot-btn-enabled", function(e) {
                 e.preventDefault();
-                $(this).css("background-color", "#34BDFF");
+                $(".timeslot-btn-selected").removeClass("timeslot-btn-selected").addClass("timeslot-btn-enabled");
+                $(this).removeClass("timeslot-btn-enabled").addClass("timeslot-btn-selected");
+                var timeslot = $(this).val();
+
+                $.ajax({
+                    url: "set-time.php",
+                    method: "POST",
+                    data: {
+                        timeslot: timeslot
+                    },
+                    success: function() {
+                        $("#submit-btn").prop("disabled", false);
+                        $("#submit-btn").css("background-color", "#9dd1ea");
+                        $(document).on("mouseover", "#submit-btn", function() {
+                            $("#submit-btn").css("background-color", "#84c8e8");
+                        })
+                        $(document).on("mouseout", "#submit-btn", function() {
+                            $("#submit-btn").css("background-color", "#9dd1ea")
+                        })
+                    }
+                })
+            })
+
+            $(document).on("click", ".timeslot-btn-selected", function(e) {
+                e.preventDefault();
+                $(this).removeClass("timeslot-btn-selected").addClass("timeslot-btn-enabled");
+                $("#submit-btn").prop("disabled", true);
+                $("#submit-btn").css("background-color", "#c9e6f3");
+                $(document).off("mouseover", "#submit-btn");
+                $(document).off("mouseout", "#submit-btn");
             })
         })
     </script>

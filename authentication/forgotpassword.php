@@ -36,7 +36,7 @@ function sendemail()
 
         if ($mail->send()) {
             echo "<script>alert('Verification code has been send to " . $_SESSION["mailto"] . "');</script>";
-            echo "<script>window.location.replace('verify.php');</script>";
+            echo "<script>window.location.href = 'verify.php';</script>";
         }
     } catch (Exception $e) {
         echo "<script>alert('Message could not be sent. Mailer Error: {$mail->ErrorInfo}');</script>";
@@ -47,7 +47,7 @@ if (isset($_POST["submit"])) {
     $email = $_POST["email"];
     $_SESSION["mailto"] = $email;
 
-    if (str_contains($email, "gmail.com") || str_contains($email, "yahoo.com") || str_contains($email, "hotmail.com") || str_contains($email, "segi4u.my") || str_contains($email, "segi.edu.my")) {
+    if (str_contains($email, "gmail.com") || str_contains($email, "outlook.com") || str_contains($email, "hotmail.com") || str_contains($email, "segi4u.my") || str_contains($email, "segi.edu.my")) {
 
         //search from patient table
         $sql = "SELECT id FROM patient_info WHERE email = '$email'";
@@ -189,7 +189,7 @@ if (isset($_POST["submit"])) {
             top: 70%;
             left: 40%;
             margin: 0%;
-            background-color: #b6def1;
+            background-color: #c9e6f3;
             color: white;
             border: none;
             border-radius: 5px;

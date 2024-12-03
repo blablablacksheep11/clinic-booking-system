@@ -21,9 +21,9 @@ if (isset($_POST['date'])) {
     $timeslots = ["9:00a.m. - 9:30a.m.", "9:30a.m. - 10:00a.m.", "10:00a.m. - 10:30a.m.", "10:30a.m. - 11:00a.m."];
     foreach ($timeslots as $timeslot) {
         if (in_array($timeslot, $unavailabletimeslot)) {
-            echo "<button class='timeslot-btn-disabled'>{$timeslot}</button>";
+            echo "<button class='timeslot-btn-disabled' value='$timeslot'>{$timeslot}</button>";
         } else {
-            echo "<button class='timeslot-btn-enabled'>{$timeslot}</button>";
+            echo "<button class='timeslot-btn-enabled' value='$timeslot'>{$timeslot}</button>";
         }
     }
     echo "</div>";
@@ -31,10 +31,11 @@ if (isset($_POST['date'])) {
     $timeslots = ["11:00a.m. - 11:30a.m.", "11:30a.m. - 12:00p.m.", "2:00p.m. - 2:30p.m.", "2:30p.m. - 3:00p.m."];
     foreach ($timeslots as $timeslot) {
         if (in_array($timeslot, $unavailabletimeslot)) {
-            echo "<button class='timeslot-btn-disabled'>{$timeslot}</button>";
+            echo "<button class='timeslot-btn-disabled' value='$timeslot'>{$timeslot}</button>";
         } else {
-            echo "<button class='timeslot-btn-enabled'>{$timeslot}</button>";
+            echo "<button class='timeslot-btn-enabled' value='$timeslot'>{$timeslot}</button>";
         }
     }
     echo "</div>";
+    echo "<script>document.getElementById('submit-btn').style.display = 'block';</script>";
 }
