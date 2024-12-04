@@ -1,9 +1,10 @@
 <?php
 session_start();
 include("../include/database.php");
-include("../include/patient-navbar.php");
+include("../include/admin-navbar.php");
 unset($_SESSION["dategetted"]);
 unset($_SESSION["doctorgetted"]);
+
 ?>
 
 <!DOCTYPE html>
@@ -69,7 +70,7 @@ unset($_SESSION["doctorgetted"]);
             left: -10%;
         }
 
-        #view-btn {
+        #manage-btn {
             position: absolute;
             height: 8%;
             width: 13%;
@@ -82,7 +83,7 @@ unset($_SESSION["doctorgetted"]);
             font-family: Roboto;
         }
 
-        #view-btn:hover {
+        #manage-btn:hover {
             background-color: #84c8e8;
         }
 
@@ -120,11 +121,11 @@ unset($_SESSION["doctorgetted"]);
     <div id="img-container">
         <img src="../pic/clinicbuilding2.jpg" id="img">
     </div>
-    <button id="view-btn">Create New Appointment</button>
+    <button id="manage-btn">Manage Appointment</button>
 </body>
 <script>
-    document.getElementById("create-btn").addEventListener("click", function() {
-        window.location.href = "../patient/appointment.php";
+    document.getElementById("manage-btn").addEventListener("click", function() {
+        window.location.href = "../admin/appointment.php";
     })
 </script>
 

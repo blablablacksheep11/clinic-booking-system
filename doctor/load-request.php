@@ -6,7 +6,7 @@ include("../include/database.php");
 echo "<div id='appointment-title-container'>";
 echo "<label id='date-title'>Date</label>";
 echo "<label id='time-title'>Time</label>";
-echo "<label id='doctor-title'>Patient</label>";
+echo "<label id='patient-title'>Patient</label>";
 echo "</div>";
 $counter = 2;
 $sql = "SELECT * FROM appointment WHERE status = 'Pending' AND doctor_id = '" . $_SESSION["doctorid"] . "' ORDER BY date";
@@ -21,7 +21,7 @@ if (mysqli_num_rows($result) > 0) {
             echo "<div class='appointment-item-even'>";
             echo "<p class='date-label'>" . $row["date"] . "</p>";
             echo "<p class='time-label'>" . $row['time'] . "</p>";
-            echo "<p class='doctor-label'>" . $patientname['name'] . "</p>";
+            echo "<p class='patient-label'>" . $patientname['name'] . "</p>";
             echo "<button class='accept-btn' value='" . $row['id'] . "'>Accept</button>";
             echo "<button class='reject-btn' value='" . $row['id'] . "'>Reject</button>";
             echo "</div>";
@@ -32,7 +32,7 @@ if (mysqli_num_rows($result) > 0) {
             $patientname = mysqli_fetch_assoc($result1);
             echo "<div class='appointment-item-odd'>";
             echo "<p class='date-label'>" . $row['date'] . "</p>";
-            echo "<p class='time-label'>" . $row['time'] . "</p>";
+            echo "<p class='patient-label'>" . $row['time'] . "</p>";
             echo "<p class='doctor-label'>" . $patientname['name'] . "</p>";
             echo "<button class='accept-btn' value='" . $row['id'] . "'>Accept</button>";
             echo "<button class='reject-btn' value='" . $row['id'] . "'>Reject</button>";

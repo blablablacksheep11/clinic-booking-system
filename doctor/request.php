@@ -124,7 +124,7 @@ if (isset($_POST["delete"])) {
             font-size: 1.0rem;
         }
 
-        .doctor-label {
+        .patient-label {
             position: absolute;
             left: 35%;
             font-family: Roboto;
@@ -223,7 +223,7 @@ if (isset($_POST["delete"])) {
             font-size: 1.0rem;
         }
 
-        #doctor-title {
+        #patient-title {
             position: absolute;
             bottom: 10%;
             left: 35%;
