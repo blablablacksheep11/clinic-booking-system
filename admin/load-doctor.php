@@ -13,6 +13,8 @@ if (isset($_POST["doctorid"])) {
     $_SESSION["doctorspecialist"] = $valuereturned["specialist"];
     $_SESSION["doctordescription"] = $valuereturned["description"];
     $_SESSION["doctorselected"] = true;
+
+    $_SESSION["appointmentdoctorid2"] = $valuereturned["id"];
     
 } else if (isset($_SESSION["doctorselected"])) {
     echo "<div id='img-container'>";
@@ -26,5 +28,4 @@ if (isset($_POST["doctorid"])) {
     echo "<p class='doctor-description'>" . $_SESSION["doctordescription"] . "</p>";
 
     $_SESSION["doctorgetted"] = true;
-    unset($_SESSION["doctorselected"]);
 }

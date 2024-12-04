@@ -25,7 +25,7 @@
         .nav-btn {
             background-color: transparent;
             border: 3px solid #9dbdea;
-            border-radius: 10px;
+            border-radius: 5px;
             display: flex;
             align-items: center;
             height: 50%;

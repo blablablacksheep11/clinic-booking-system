@@ -2,9 +2,13 @@
 session_start();
 include("../include/database.php");
 include("../include/admin-navbar.php");
+unset($_SESSION["dategetted"]);
+unset($_SESSION["doctorgetted"]);
+
 
 if(isset($_POST["edit"])){
     $id = $_POST["edit"];
+    $_SESSION["appointmentid"] = $_POST["edit"];
 
     $sql = "SELECT * FROM appointment WHERE id = '$id'";
     $result = mysqli_query($connection, $sql);
@@ -14,6 +18,26 @@ if(isset($_POST["edit"])){
     $_SESSION["appointmenttime"] = $valuereturned["time"];
     $_SESSION["appointmentpatientid"] = $valuereturned["patient_id"];
     $_SESSION["appointmentdoctorid"] = $valuereturned["doctor_id"];
+
+    $_SESSION["appointmentdate2"] = $valuereturned["date"];
+    $_SESSION["appointmenttime2"] = $valuereturned["time"];
+    $_SESSION["appointmentpatientid2"] = $valuereturned["patient_id"];
+    $_SESSION["appointmentdoctorid2"] = $valuereturned["doctor_id"];
+
+    $doctorid = $_SESSION["appointmentdoctorid"];
+    $sql = "SELECT * FROM doctor_info WHERE id = '$doctorid'";
+    $result = mysqli_query($connection, $sql);
+    $valuereturned = mysqli_fetch_assoc($result);
+    $_SESSION["doctorid"] = $valuereturned["id"];
+    $_SESSION["doctorpicture"] = $valuereturned["picture"];
+    $_SESSION["doctorname"] = $valuereturned["name"];
+    $_SESSION["doctorspecialist"] = $valuereturned["specialist"];
+    $_SESSION["doctordescription"] = $valuereturned["description"];
+    $_SESSION["doctorselected"] = true;
+    $_SESSION["dategetted"] = true;
+    $_SESSION["doctorgetted"] = true;
+    unset($_SESSION["date"]);
+    unset($_SESSION["timeslot"]);
 
     echo "<script>window.location.href = 'edit-appointment.php';</script>";
 }

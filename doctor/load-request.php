@@ -32,8 +32,8 @@ if (mysqli_num_rows($result) > 0) {
             $patientname = mysqli_fetch_assoc($result1);
             echo "<div class='appointment-item-odd'>";
             echo "<p class='date-label'>" . $row['date'] . "</p>";
-            echo "<p class='patient-label'>" . $row['time'] . "</p>";
-            echo "<p class='doctor-label'>" . $patientname['name'] . "</p>";
+            echo "<p class='time-label'>" . $row['time'] . "</p>";
+            echo "<p class='patient-label'>" . $patientname['name'] . "</p>";
             echo "<button class='accept-btn' value='" . $row['id'] . "'>Accept</button>";
             echo "<button class='reject-btn' value='" . $row['id'] . "'>Reject</button>";
             echo "</div>";

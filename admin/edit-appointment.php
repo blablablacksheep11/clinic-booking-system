@@ -2,9 +2,30 @@
 session_start();
 include("../include/database.php");
 include("../include/admin-navbar.php");
-unset($_SESSION["dategetted"]);
-unset($_SESSION["doctorgetted"]);
+unset($_SESSION["date"]);
+unset($_SESSION["timeslot"]);
 
+$doctorid = $_SESSION["appointmentdoctorid"];
+$sql = "SELECT * FROM doctor_info WHERE id = '$doctorid'";
+$result = mysqli_query($connection, $sql);
+$valuereturned = mysqli_fetch_assoc($result);
+
+$_SESSION["doctorid"] = $valuereturned["id"];
+$_SESSION["doctorpicture"] = $valuereturned["picture"];
+$_SESSION["doctorname"] = $valuereturned["name"];
+$_SESSION["doctorspecialist"] = $valuereturned["specialist"];
+$_SESSION["doctordescription"] = $valuereturned["description"];
+$_SESSION["doctorselected"] = true;
+
+if (isset($_POST["submit"])) {
+    $date = $_SESSION["appointmentdate2"];
+    $timeslot = $_SESSION["appointmenttime2"];
+    $doctorid = $_SESSION["appointmentdoctorid2"];
+    $appointmentid = $_SESSION["appointmentid"];
+    $sql = "UPDATE appointment SET date = '$date', time = '$timeslot', doctor_id = '$doctorid', requested = '0' WHERE id = '$appointmentid'";
+    mysqli_query($connection, $sql);
+    echo "<script>window.location.href = 'appointment.php';</script>";
+}
 ?>
 
 <!DOCTYPE html>
@@ -111,14 +132,18 @@ unset($_SESSION["doctorgetted"]);
             position: absolute;
             height: 8%;
             width: 13%;
-            top: 75%;
+            top: 82%;
             left: 10%;
-            background-color: #c9e6f3;
+            background-color: #9dd1ea;
             color: white;
             border: none;
             border-radius: 10px;
             font-family: Roboto;
-            display: none;
+            display: block;
+        }
+
+        .submit-btn:hover {
+            background-color: #84c8e8;
         }
 
         #heading {
@@ -188,6 +213,14 @@ unset($_SESSION["doctorgetted"]);
             justify-content: space-between;
         }
 
+        #patient-name-label {
+            position: absolute;
+            font-family: Roboto;
+            font-size: 1.5rem;
+            margin-top: 1%;
+            top: 10%;
+        }
+
         #img-container {
             position: absolute;
             width: 100%;
@@ -222,20 +255,22 @@ unset($_SESSION["doctorgetted"]);
 </head>
 
 <body>
-    <h1 id="heading">Appointment</h1>
+    <h1 id="heading">Appointment / Edit</h1>
     <div id="form-container">
         <form>
             <label for="patient-name-field" class="form-label">Patient</label>
-
+            <label id="patient-name-label"><?php $sql = "SELECT name FROM patient_info WHERE id = '" . $_SESSION["appointmentpatientid"] . "'";
+                                            $result = mysqli_query($connection, $sql);
+                                            $valuereturned = mysqli_fetch_assoc($result);
+                                            echo $valuereturned["name"]; ?></label>
             <br><br><br><br>
             <label for="date-field" class="form-label">Date:</label>
             <br>
-            <input type="date" class="form-field" id="date-field">
+            <input type="date" class="form-field" id="date-field" value="<?php echo $_SESSION["appointmentdate"]; ?>">
             <br><br><br><br>
             <label for="doctor-list" class="form-label">Doctor:</label>
             <br>
             <select name="doctor" id="doctor-list" class="form-field">
-                <option selected disabled>Select a doctor</option>
                 <?php
                 $sql = "SELECT * FROM doctor_info";
                 $result = mysqli_query($connection, $sql);
@@ -244,8 +279,8 @@ unset($_SESSION["doctorgetted"]);
                     <option value=<?php echo $row["id"]; ?>>Dr <?php echo $row["name"]; ?></option>
                 <?php
                 }
-                if (isset($_SESSION["doctorselected"])) {
-                    $doctorid = $_SESSION["doctorid"];
+                if (isset($_SESSION["appointmentdoctorid"])) {
+                    $doctorid = $_SESSION["appointmentdoctorid"];
                     echo "<script>document.getElementById('doctor-list').value = '$doctorid';</script>";
                 }
                 ?>
@@ -254,13 +289,14 @@ unset($_SESSION["doctorgetted"]);
     </div>
     <div id="doctor-container"></div>
     <div id="timeslot-container"></div>
-    <form action="appointment.php" method="post">
-        <input type="submit" class="submit-btn" id="submit-btn" value="Create Appointment" name="submit" disabled>
+    <form action="edit-appointment.php" method="post">
+        <input type="submit" class="submit-btn" id="submit-btn" value="Update Appointment" name="submit">
     </form>
 
     <script>
         $(document).ready(function() {
             $("#doctor-container").load("load-doctor.php");
+            $("#timeslot-container").load("load-timeslot.php");
             $(document).on("change", "#doctor-list", function(e) {
                 e.preventDefault();
                 $("#submit-btn").prop("disabled", true);
@@ -307,6 +343,7 @@ unset($_SESSION["doctorgetted"]);
                 $(".timeslot-btn-selected").removeClass("timeslot-btn-selected").addClass("timeslot-btn-enabled");
                 $(this).removeClass("timeslot-btn-enabled").addClass("timeslot-btn-selected");
                 var timeslot = $(this).val();
+                var date = $("#date-field").val();
 
                 $.ajax({
                     url: "set-time.php",
@@ -335,6 +372,7 @@ unset($_SESSION["doctorgetted"]);
                 $(document).off("mouseover", "#submit-btn");
                 $(document).off("mouseout", "#submit-btn");
             })
+
         })
     </script>
 </body>

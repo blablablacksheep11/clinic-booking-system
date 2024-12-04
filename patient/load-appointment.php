@@ -13,32 +13,38 @@ if (isset($_POST["id"])) {
     echo "<label id='doctor-title'>Doctor</label>";
     echo "</div>";
     $counter = 2;
-    $sql = "SELECT * FROM appointment WHERE status = 'Approved' AND patient_id = '".$_SESSION["patientid"]."' ORDER BY date";
+    $sql = "SELECT * FROM appointment WHERE status = 'Approved' AND patient_id = '" . $_SESSION["patientid"] . "' ORDER BY date";
     $result = mysqli_query($connection, $sql);
-    while ($row = mysqli_fetch_assoc($result)) {
-        if ($counter % 2 == 0) {
-            $sql1 = "SELECT name FROM doctor_info WHERE id = '" . $row["doctor_id"] . "'";
-            $result1 = mysqli_query($connection, $sql1);
-            $doctorname = mysqli_fetch_assoc($result1);
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            if ($counter % 2 == 0) {
+                $sql1 = "SELECT name FROM doctor_info WHERE id = '" . $row["doctor_id"] . "'";
+                $result1 = mysqli_query($connection, $sql1);
+                $doctorname = mysqli_fetch_assoc($result1);
 
-            echo "<div class='appointment-item-even'>";
-            echo "<p class='date-label'>" . $row["date"] . "</p>";
-            echo "<p class='time-label'>" . $row['time'] . "</p>";
-            echo "<p class='doctor-label'>Dr." . $doctorname['name'] . "</p>";
-            echo "<button class='delete-btn' value='" . $row['id'] . "'>Delete</button>";
-            echo "</div>";
-            $counter += 1;
-        } else {
-            $sql1 = "SELECT name FROM doctor_info WHERE id = '" . $row["doctor_id"] . "'";
-            $result1 = mysqli_query($connection, $sql1);
-            $doctorname = mysqli_fetch_assoc($result1);
-            echo "<div class='appointment-item-odd'>";
-            echo "<p class='date-label'>" . $row['date'] . "</p>";
-            echo "<p class='time-label'>" . $row['time'] . "</p>";
-            echo "<p class='doctor-label'>Dr. " . $doctorname['name'] . "</p>";
-            echo "<button class='delete-btn' value='" . $row['id'] . "'>Delete</button>";
-            echo "</div>";
-            $counter += 1;
+                echo "<div class='appointment-item-even'>";
+                echo "<p class='date-label'>" . $row["date"] . "</p>";
+                echo "<p class='time-label'>" . $row['time'] . "</p>";
+                echo "<p class='doctor-label'>Dr." . $doctorname['name'] . "</p>";
+                echo "<button class='delete-btn' value='" . $row['id'] . "'>Delete</button>";
+                echo "</div>";
+                $counter += 1;
+            } else {
+                $sql1 = "SELECT name FROM doctor_info WHERE id = '" . $row["doctor_id"] . "'";
+                $result1 = mysqli_query($connection, $sql1);
+                $doctorname = mysqli_fetch_assoc($result1);
+                echo "<div class='appointment-item-odd'>";
+                echo "<p class='date-label'>" . $row['date'] . "</p>";
+                echo "<p class='time-label'>" . $row['time'] . "</p>";
+                echo "<p class='doctor-label'>Dr. " . $doctorname['name'] . "</p>";
+                echo "<button class='delete-btn' value='" . $row['id'] . "'>Delete</button>";
+                echo "</div>";
+                $counter += 1;
+            }
         }
+    } else {
+        echo "<div id='empty-item'>";
+        echo "<label id='empty-label'>No upcoming appointment</label>";
+        echo "</div>";
     }
 }

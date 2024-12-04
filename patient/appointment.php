@@ -272,6 +272,21 @@ if (isset($_POST["submit"])) {
         #appointment-nav-btn:hover {
             background-color: #70a5ef;
         }
+
+        #empty-item {
+            position: relative;
+            background-color: #f1f1f1;
+            height: 7vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #empty-label {
+            position: absolute;
+            font-family: Roboto;
+        }
     </style>
 </head>
 
