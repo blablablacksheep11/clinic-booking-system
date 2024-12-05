@@ -50,3 +50,18 @@ Administrator module:
 3. Appointment (manage appointment)
 4. Request (accept and reject delete appointment request from doctor)
 
+??Tips to use
+1. the appointment will only legitly created after the doctor has accept it
+2. the appointment will only be legitly deleted after the administrator approved the delete request
+
+Patient account:
+email: lamyongqin@gmail.com
+password: yqlam
+
+Doctor account:
+email: lamyongqin@outlook.com
+password: tohhannah
+
+Admin accoutn:
+email: scpg2300128@segi4u.my
+password: admin01
