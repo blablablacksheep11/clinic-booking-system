@@ -27,8 +27,11 @@ Finally, you can run the code now!!! *make sure that the code file is placed in 
 
 The first interface the user will meet is the sign in interface. There will be 2 hypertext, 1 for forgot password, 1 for sign up. The sign up feature is only available for the patient but not the doctor adn administrator.
 The forgot password feature is open for all. All the 3 entities will be using the same sign in interface. The email address will be the key that identify the role of the user (the email address is also one of the user primary key)
+
 !!! The system only support @gmail.com, @outlook.com, @segi4u.my, $segi.edu.my
+
 !!! The user might not receive any email if they using @outlook.com, organizational email
+
 !!! kindy check the junk email if not receiving email notification
 
 Patient module:
