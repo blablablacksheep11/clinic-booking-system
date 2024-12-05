@@ -5,19 +5,13 @@ include("../include/admin-navbar.php");
 
 if (isset($_POST["edit"])){
     $id = $_POST["edit"];
-    $sql = "SELECT * FROM doctor_info WHERE id = '$id'";
-    $result = mysqli_query($connection, $sql);
-    $valuereturned = mysqli_fetch_assoc($result);
-
-    $_SESSION["doctorid"] = $valuereturned["id"];
-    $_SESSION["doctorname"] = $valuereturned["name"];
-    $_SESSION["doctorcontactnumber"] = $valuereturned["contact_number"];
-    $_SESSION["doctorspecialist"] = $valuereturned["specialist"];
-    $_SESSION["doctordescription"] = $valuereturned["description"];
-    $_SESSION["doctorpicture"] = $valuereturned["picture"];
-    $_SESSION["doctorpassword"] = $valuereturned["password"];
+    $_SESSION["doctorid"] = $id;
 
     echo "<script>window.location.href = 'edit-doctor.php';</script>";
+}
+
+if (isset($_POST["new"])){
+    echo "<script>window.location.href = 'add-doctor.php';</script>";
 }
 
 ?>
@@ -52,7 +46,7 @@ if (isset($_POST["edit"])){
             display: none;
         }
 
-        .appointment-item-even {
+        .doctor-item-even {
             position: relative;
             background-color: #d9d9d9;
             height: 7vh;
@@ -61,7 +55,7 @@ if (isset($_POST["edit"])){
             align-items: center;
         }
 
-        .appointment-item-odd {
+        .doctor-item-odd {
             position: relative;
             background-color: rgba(217, 217, 217, 0.56);
             height: 7vh;
@@ -167,7 +161,7 @@ if (isset($_POST["edit"])){
             overflow: hidden;
         }
 
-        #appointment-title-container {
+        #doctor-title-container {
             position: relative;
             background-color: transparent;
             height: 7vh;

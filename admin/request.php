@@ -35,7 +35,7 @@ include("../include/admin-navbar.php");
             display: none;
         }
 
-        .appointment-item-even {
+        .request-item-even {
             position: relative;
             background-color: #d9d9d9;
             height: 7vh;
@@ -44,7 +44,7 @@ include("../include/admin-navbar.php");
             align-items: center;
         }
 
-        .appointment-item-odd {
+        .request-item-odd {
             position: relative;
             background-color: rgba(217, 217, 217, 0.56);
             height: 7vh;
@@ -140,7 +140,7 @@ include("../include/admin-navbar.php");
             overflow: hidden;
         }
 
-        #appointment-title-container {
+        #request-title-container {
             position: relative;
             background-color: transparent;
             height: 7vh;

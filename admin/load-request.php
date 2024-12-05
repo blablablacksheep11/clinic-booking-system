@@ -3,7 +3,7 @@ session_start();
 include("../include/database.php");
 
 
-echo "<div id='appointment-title-container'>";
+echo "<div id='request-title-container'>";
 echo "<label id='date-title'>Date</label>";
 echo "<label id='time-title'>Time</label>";
 echo "<label id='patient-title'>Patient</label>";
@@ -23,7 +23,7 @@ if (mysqli_num_rows($result) > 0) {
             $result2 = mysqli_query($connection, $sql2);
             $doctorname = mysqli_fetch_assoc($result2);
 
-            echo "<div class='appointment-item-even'>";
+            echo "<div class='request-item-even'>";
             echo "<p class='date-label'>" . $row["date"] . "</p>";
             echo "<p class='time-label'>" . $row['time'] . "</p>";
             echo "<p class='patient-label'>" . $patientname['name'] . "</p>";
@@ -43,7 +43,7 @@ if (mysqli_num_rows($result) > 0) {
             $result2 = mysqli_query($connection, $sql2);
             $doctorname = mysqli_fetch_assoc($result2);
 
-            echo "<div class='appointment-item-odd'>";
+            echo "<div class='request-item-odd'>";
             echo "<p class='date-label'>" . $row['date'] . "</p>";
             echo "<p class='time-label'>" . $row['time'] . "</p>";
             echo "<p class='patient-label'>" . $patientname['name'] . "</p>";
@@ -56,7 +56,6 @@ if (mysqli_num_rows($result) > 0) {
             $counter += 1;
         }
     }
-    echo "<script>document.getElementById('request-btn').addEventListener('click', function(){window.location.href = 'request.php';})</script>";
 } else {
     echo "<div id='empty-item'>";
     echo "<label id='empty-label'>No delete appointment request found</label>";
