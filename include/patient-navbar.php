@@ -71,6 +71,8 @@
             top: 0%;
             width: 100%;
             height: 13%;
+            display: flex;
+            align-items: center;
         }
 
         #logo-container {
@@ -97,6 +99,39 @@
             display: flex;
             align-items: center;
             justify-content: space-evenly;
+        }
+
+        #profile-btn-container {
+            background-color: transparent;
+            position: absolute;
+            height: 70%;
+            width: 5%;
+            left: 90%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        #profile-btn{
+            background-color: transparent;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            border-radius: 100px;
+        }
+
+        #profile-btn:hover{
+            background-color: whitesmoke;
+        }
+
+        #profile-btn img{
+            width: 120%;
+            height: auto;
         }
 
         
@@ -166,6 +201,12 @@
                 <label class="nav-btn-label">&nbsp;&nbsp;Schedule</label>
             </button>
         </div>
+
+        <div id="profile-btn-container">
+            <button id="profile-btn">
+                <img src="../pic/profile.png">
+            </button>
+        </div>
     </div>
 </body>
 <script>
@@ -180,6 +221,9 @@
     })
     document.getElementById("schedule-nav-btn").addEventListener("click", function(){
         window.location.href = "../patient/schedule.php";
+    })
+    document.getElementById("profile-btn").addEventListener("click", function(){
+        window.location.href = "../patient/profile.php";
     })
 </script>
 </html>

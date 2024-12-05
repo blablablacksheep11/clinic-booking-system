@@ -1,22 +1,21 @@
 <?php
 session_start();
 include("../include/database.php");
-include("../include/admin-navbar.php");
-include("../include/mini-sidenavbar-patient.php");
+include("../include/doctor-navbar.php");
+include("../include/profile-sidebar-doctor.php");
 
-$id = $_SESSION["patientid"];
-$sql = "SELECT * FROM patient_info WHERE id = '$id'";
+$id = $_SESSION["doctorid"];
+$sql = "SELECT * FROM doctor_info WHERE id = '$id'";
 $result = mysqli_query($connection, $sql);
 $valuereturned = mysqli_fetch_assoc($result);
 
-$_SESSION["patientid"] = $valuereturned["id"];
-$_SESSION["patientname"] = $valuereturned["name"];
-$_SESSION["patientemail"] = $valuereturned["email"];
-$_SESSION["patientdob"] = $valuereturned["dob"];
-$_SESSION["patientcontactnumber"] = $valuereturned["contact_number"];
-$_SESSION["patienticnumber"] = $valuereturned["ic_number"];
-$_SESSION["patientpassword"] = $valuereturned["password"];
-
+$_SESSION["doctorid"] = $valuereturned["id"];
+$_SESSION["doctorname"] = $valuereturned["name"];
+$_SESSION["doctoremail"] = $valuereturned["email"];
+$_SESSION["doctorcontactnumber"] = $valuereturned["contact_number"];
+$_SESSION["doctorspecialist"] = $valuereturned["specialist"];
+$_SESSION["doctordescription"] = $valuereturned["description"];
+$_SESSION["doctorpicture"] = $valuereturned["picture"];
 
 
 if (isset($_POST['save'])) {
@@ -24,17 +23,17 @@ if (isset($_POST['save'])) {
     $name = $_POST["name"];
     $email = $_POST["email"];
     $contactnumber = $_POST["contactnumber"];
-    $icnumber = $_POST["icnumber"];
-    $dob = $_POST["dob"];
+    $specialist = $_POST["specialist"];
+    $description = $_POST["description"];
 
-    $_SESSION["patientname"] = $name;
-    $_SESSION["patientemail"] = $email;
-    $_SESSION["patientcontactnumber"] = $contactnumber;
-    $_SESSION["patienticnumber"] = $icnumber;
-    $_SESSION["patient"] = $dob;
+    $_SESSION["doctorname"] = $name;
+    $_SESSION["doctoremail"] = $email;
+    $_SESSION["doctorcontactnumber"] = $contactnumber;
+    $_SESSION["doctorspecialist"] = $specialist;
+    $_SESSION["doctordescription"] = $description;
 
 
-    $sql = "UPDATE patient_info SET name = '$name', email = '$email', contact_number = '$contactnumber', ic_number = '$icnumber', dob = '$dob' WHERE id = '" . $_SESSION["patientid"] . "'";
+    $sql = "UPDATE doctor_info SET name = '$name', email = '$email', contact_number = '$contactnumber', specialist = '$specialist', description = '$description' WHERE id = '" . $_SESSION["doctorid"] . "'";
     if (mysqli_query($connection, $sql)) {
         echo "<script>alert('Data updated successfully.');</script>";
     } else {
@@ -146,8 +145,8 @@ if (isset($_POST['save'])) {
             position: absolute;
             height: 12%;
             width: 15%;
-            top: 80%;
-            left: 0%;
+            top: 110%;
+            left: 100%;
             background-color: #9dd1ea;
             color: white;
             border: none;
@@ -238,34 +237,35 @@ if (isset($_POST['save'])) {
             position: absolute;
             height: auto;
             width: 150%;
-            top: -25%;
-            left: -25%;
+            left: -28%;
         }
     </style>
 </head>
 
 <body>
-    <h1 id="heading">Patient / Edit</h1>
+    <h1 id="heading">Profile / General  </h1>
     <div id="img-container">
-        <img id="profile-picture" src="../pic/profile.png" alt="Profile Picture">
+        <img id="profile-picture" src="../pic/<?php echo $_SESSION["doctorpicture"]; ?>" alt="Profile Picture">
     </div>
     <div id="form-container">
-        <form action="edit-patient.php" method="post" autocomplete="off">
-            <label for="name" class="form-label-left">Name:</label>
+        <form action="profile.php" method="post" autocomplete="off">
+        <label for="name" class="form-label-left">Name:</label>
             <br>
-            <input type="text" class="form-field-long-narrow" id="name" name="name" value="<?php echo $_SESSION["patientname"]; ?>">
-            <br><br><br>
-            <label for="dob" class="form-label-left">Date of Birth:</label>
-            <label for="icnumber" class="form-label-right">IC Number:</label>
-            <br>
-            <input type="date" class="form-field-short-left" id="dob" name="dob" value="<?php echo $_SESSION["patientdob"]; ?>">
-            <input type="text" class="form-field-short-right" id="icnumber" pattern="[0-9]{6}-[0-9]{2}-[0-9]{4}" placeholder="010123-07-1259" name="icnumber" value="<?php echo $_SESSION["patienticnumber"]; ?>">
+            <input type="text" class="form-field-short-left" id="name" name="name" value="<?php echo $_SESSION["doctorname"]; ?>">
             <br><br><br>
             <label for="email" class="form-label-left">Email:</label>
             <label for="contactnumber" class="form-label-right">Contact Number:</label>
             <br>
-            <input type="email" class="form-field-short-left" id="email" name="email" value="<?php echo $_SESSION["patientemail"]; ?>">
-            <input type="text" class="form-field-short-right" id="contactnumber" pattern="[0-9]{3}-[0-9]{7}" name="contactnumber" value="<?php echo $_SESSION["patientcontactnumber"]; ?>">
+            <input type="email" class="form-field-short-left" id="email" name="email" value="<?php echo $_SESSION["doctoremail"]; ?>">
+            <input type="text" class="form-field-short-right" id="contactnumber" pattern="[0-9]{3}-[0-9]{7}" name="contactnumber" value="<?php echo $_SESSION["doctorcontactnumber"]; ?>">
+            <br><br><br>
+            <label for="specialist" class="form-label-left">Specialist:</label>
+            <br>
+            <input type="text" class="form-field-long-narrow" id="specialist" name="specialist" value="<?php echo $_SESSION["doctorspecialist"]; ?>">
+            <br><br><br>
+            <label for="description" class="form-label-left">Description:</label>
+            <br>
+            <input type="text" class="form-field-long-wide" id="description" name="description" value="<?php echo $_SESSION["doctordescription"]; ?>">
             <input type="submit" class="submit-btn" name="save" value="Save Changes">
         </form>
     </div>

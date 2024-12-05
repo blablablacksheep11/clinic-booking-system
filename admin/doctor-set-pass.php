@@ -17,8 +17,9 @@ if (isset($_POST["submit"])) {
     $specialist = $_SESSION["doctorspecialist"];
     $description = $_SESSION["doctordescription"];
     $picture = $_SESSION["doctorpicture"];
+    $hashedpassword = password_hash($password, PASSWORD_BCRYPT);
 
-    $sql = "INSERT INTO doctor_info (name, email, contact_number, specialist, description, picture, password) VALUES ('$name','$email','$contactnumber','$specialist','$description','$picture','$password')";
+    $sql = "INSERT INTO doctor_info (name, email, contact_number, specialist, description, picture, password) VALUES ('$name','$email','$contactnumber','$specialist','$description','$picture','$hashedpassword')";
     if (mysqli_query($connection, $sql)) {
         echo "<script>alert('Account created.');</script>";
         //Load Composer's autoloader

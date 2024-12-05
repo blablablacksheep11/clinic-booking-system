@@ -277,7 +277,7 @@ if (isset($_POST['next'])) {
 <body>
     <h1 id="heading">Doctor / New</h1>
     <div id="img-container">
-        <img id="profile-picture" src="../pic/profile.jpg" alt="Profile Picture">
+        <img id="profile-picture" src="../pic/profile.png" alt="Profile Picture">
     </div>
     <div id="form-container">
         <form action="add-doctor.php" method="post" enctype="multipart/form-data" autocomplete="off">

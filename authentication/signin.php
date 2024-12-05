@@ -42,6 +42,7 @@ if (isset($_POST["submit"])) {
                 $_SESSION["doctorid"] = $valuereturned1["id"];
                 $_SESSION["doctoremail"] = $valuereturned1["email"];
                 $_SESSION["doctorname"] = $valuereturned1["name"];
+                $_SESSION["doctorpicture"] = $valuereturned1["picture"];
                 echo "<script>window.location.href = '../doctor/home.php';</script>";
             } else {
                 echo "<script>alert('Invalid password.');</script>";

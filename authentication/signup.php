@@ -32,7 +32,7 @@ function sendemail()
         //Content
         $mail->isHTML(true);                                  //Set email format to HTML
         $mail->Subject = 'Verification code for password reset';
-        $mail->Body    = "Only one step left to reset your password. Please use this verification code:  <br> <b>" . $_SESSION["verificationcode"] . "</b>";
+        $mail->Body    = "Only one step left to created new account. Please use this verification code:  <br> <b>" . $_SESSION["verificationcode"] . "</b>";
 
         if ($mail->send()) {
             echo "<script>alert('Verification code has been send to " . $_SESSION["mailto"] . "');</script>";

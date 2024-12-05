@@ -1,8 +1,8 @@
 <?php
 session_start();
 include("../include/database.php");
-include("../include/admin-navbar.php");
-include("../include/mini-sidenavbar-patient.php");
+include("../include/patient-navbar.php");
+include("../include/profile-sidebar-patient.php");
 
 $id = $_SESSION["patientid"];
 $sql = "SELECT * FROM patient_info WHERE id = '$id'";
@@ -105,19 +105,6 @@ if (isset($_POST['save'])) {
             position: absolute;
             width: 90%;
             height: 10%;
-            margin-top: 1%;
-            outline: none;
-            border-radius: 5px;
-            border: 1px solid grey;
-            font-family: Roboto;
-            font-size: 1.0rem;
-            padding-left: 1.0%;
-        }
-
-        .form-field-long-wide {
-            position: absolute;
-            width: 90%;
-            height: 30%;
             margin-top: 1%;
             outline: none;
             border-radius: 5px;
@@ -245,12 +232,12 @@ if (isset($_POST['save'])) {
 </head>
 
 <body>
-    <h1 id="heading">Patient / Edit</h1>
+    <h1 id="heading">Profile / General  </h1>
     <div id="img-container">
         <img id="profile-picture" src="../pic/profile.png" alt="Profile Picture">
     </div>
     <div id="form-container">
-        <form action="edit-patient.php" method="post" autocomplete="off">
+        <form action="profile.php" method="post" autocomplete="off">
             <label for="name" class="form-label-left">Name:</label>
             <br>
             <input type="text" class="form-field-long-narrow" id="name" name="name" value="<?php echo $_SESSION["patientname"]; ?>">

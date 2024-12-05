@@ -61,6 +61,8 @@
             top: 0%;
             width: 100%;
             height: 13%;
+            display: flex;
+            align-items: center;
         }
 
         #logo-container {
@@ -89,6 +91,38 @@
             justify-content: space-evenly;
         }
 
+        #profile-btn-container {
+            background-color: transparent;
+            position: absolute;
+            height: 70%;
+            width: 5%;
+            left: 90%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        #profile-btn{
+            background-color: transparent;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            border-radius: 100px;
+        }
+
+        #profile-btn:hover{
+            background-color: whitesmoke;
+        }
+
+        #profile-btn img{
+            width: 120%;
+            height: auto;
+        }
         
     </style>
 </head>
@@ -138,6 +172,12 @@
                 <label class="nav-btn-label">&nbsp;&nbsp;Request</label>
             </button>
         </div>
+
+        <div id="profile-btn-container">
+            <button id="profile-btn">
+                <img src="../pic/profile.png">
+            </button>
+        </div>
     </div>
 </body>
 <script>
@@ -149,6 +189,9 @@
     })
     document.getElementById("request-nav-btn").addEventListener("click", function(){
         window.location.href = "../doctor/request.php";
+    })
+    document.getElementById("profile-btn").addEventListener("click", function(){
+        window.location.href = "../doctor/profile.php";
     })
 </script>
 </html>
