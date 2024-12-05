@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 04, 2024 at 03:14 AM
+-- Generation Time: Dec 05, 2024 at 01:36 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -40,7 +40,7 @@ CREATE TABLE `admin_info` (
 --
 
 INSERT INTO `admin_info` (`id`, `name`, `email`, `contact_number`, `password`) VALUES
-(1, 'admin01', 'scpg2300128@segi4u.my', '018-7549963', '$2y$10$GbRulqMPS9tYL/8zlc2wTeNTvDvG3taW4WEQCGokaPuTvmwnUg/pm');
+(1, 'ADMIN01', 'scpg2300128@segi4u.my', '012-4047985', '$2y$10$ME0iomFK66rN5pCFswepW.iKdYeA9YKnuF2vrHkLdzBT7WGXcVC4u');
 
 -- --------------------------------------------------------
 
@@ -63,21 +63,13 @@ CREATE TABLE `appointment` (
 --
 
 INSERT INTO `appointment` (`id`, `date`, `time`, `patient_id`, `doctor_id`, `status`, `requested`) VALUES
-(5, '2024-12-14', '2:30p.m. - 3:00p.m.', 10, 4, 'Approved', '1'),
-(6, '2024-12-03', '2:00p.m. - 2:30p.m.', 10, 3, 'Approved', '0'),
-(7, '2024-12-14', '11:30a.m. - 12:00p.m.', 10, 1, 'Pending', '0'),
-(8, '2024-12-05', '11:30a.m. - 12:00p.m.', 10, 3, 'Pending', '0'),
-(9, '2024-12-06', '9:30a.m. - 10:00a.m.', 10, 2, 'Pending', '0'),
-(10, '2024-12-20', '9:00a.m. - 9:30a.m.', 10, 1, 'Pending', '0'),
-(11, '2024-12-25', '9:30a.m. - 10:00a.m.', 10, 2, 'Pending', '0'),
-(12, '2024-12-14', '9:30a.m. - 10:00a.m.', 10, 2, 'Pending', '0'),
-(13, '2024-12-06', '9:00a.m. - 9:30a.m.', 10, 1, 'Pending', '0'),
-(14, '2024-12-05', '9:30a.m. - 10:00a.m.', 10, 1, 'Pending', '0'),
-(15, '2024-12-03', '9:00a.m. - 9:30a.m.', 10, 2, 'Pending', '0'),
-(24, '2024-12-13', '11:30a.m. - 12:00p.m.', 10, 2, 'Pending', '0'),
-(25, '2024-12-13', '2:30p.m. - 3:00p.m.', 10, 4, 'Approved', '1'),
-(27, '2024-12-21', '9:30a.m. - 10:00a.m.', 10, 4, 'Approved', '0'),
-(29, '2024-12-07', '11:30a.m. - 12:00p.m.', 10, 2, 'Pending', '0');
+(1, '2024-12-11', '9:30a.m. - 10:00a.m.', 1, 2, 'Pending', '0'),
+(2, '2025-01-02', '2:00p.m. - 2:30p.m.', 1, 1, 'Approved', '1'),
+(3, '2025-03-13', '2:00p.m. - 2:30p.m.', 1, 2, 'Approved', '1'),
+(4, '2024-12-24', '9:00a.m. - 9:30a.m.', 2, 1, 'Pending', '0'),
+(5, '2025-02-01', '11:30a.m. - 12:00p.m.', 2, 1, 'Pending', '0'),
+(6, '2024-12-13', '2:00p.m. - 2:30p.m.', 2, 1, 'Approved', '0'),
+(7, '2025-01-10', '2:30p.m. - 3:00p.m.', 2, 1, 'Approved', '0');
 
 -- --------------------------------------------------------
 
@@ -101,11 +93,10 @@ CREATE TABLE `doctor_info` (
 --
 
 INSERT INTO `doctor_info` (`id`, `name`, `email`, `contact_number`, `specialist`, `description`, `picture`, `password`) VALUES
-(1, 'TOH, HANNAH', 'hooihoon70@gmail.com', '014-2316694', 'Paediatric Medicine', 'MBBS (Bombay), MRCP (UK), FRCP (Glasg)', 'doctor4.jpg', '$2y$10$YzX/WJpFHtmc6PbFbpsSs.L.d3x20gZS0.4HQdxCij0FbQxYx.YZe'),
-(2, 'LOH KEAN HENG', 'kivenraj1299@gmail.com', '016-9651123', 'Paediatric CardiologyProfessional', 'MD (USM), MRCPCH (UK), Fellowship in Paediatric Cardiology (M\'sia & Aus)', 'doctor3.jpg', 'lohkeanheng\r\n'),
-(3, 'AINA BT OTHMAN', 'pengseonglam@gmail.com', '015-8941287', 'Paediatric Medicine & Neonatology', 'MD (Mal), MRCP (UK), M Med (Paeds) (Mal)', 'doctor2.jpg', '$2y$10$eT9ZSZpt101kt9zgqBu1n.kkfRBggDdXtkuRSda.SG01tQ2l8Ocqu'),
-(4, 'SWARAN SINGH', 'hooihoon70@outlook.com', '012-8123364', 'Paediatric Neurology', 'MBBS (UM), M Med (Paeds) (UK M’sia), Fellowship In Paediatric Neurology (Mal)', 'doctor1.jpg', '$2y$10$YjXrbD8lu2oBbGYrNg3l9O9ry5nDXUFdMKhB90Twu9a3wsCbbc48y'),
-(6, 'TAN, LOUIS', 'minkailee7637@gmail.com', '012-8412215', 'Paediatric Medicine', 'MBBS (Manipal), MRCPCH (UK), M Med (Paeds) (NUS S\'pore), GDip.FP Dermatology (NUS S\'pore)', 'doctor5.jpg', 'tanlouis');
+(1, 'TOH, HANNAH', 'hooihoon70@outlook.com', '012-3369879', 'Paediatric Medicine', 'MBBS (Bombay), MRCP (UK), FRCP (Glasg)', 'doctor4.jpg', '$2y$10$0/7YeP66Nx8BuT3IzBxjgeiSWJl.4MIj6Orfx8N0IRGN5AJPIGVNq'),
+(2, 'LOH KEAN HENG', 'hooihoon70@gmail.com', '016-4873356', 'Paediatric Medicine & Neonatology', 'MD (Mal), MRCP (UK), M Med (Paeds) (Mal)', 'doctor3.jpg', '$2y$10$PYgRt2VUQ2ajlrlcv1Z8oOyIo48SECNKnNnEkb9R1TyTOFSZtyiqy'),
+(4, 'AINA BT OTHMAN', 'lamyongqin@outlook.com', '016-5117996', 'Paediatric Medicine', 'MD (Taiwan)', 'doctor2.jpg', '$2y$10$mxz.i3s5uBZt2YMLgne5zOd71VX6MeZrpJUpeU.W3A1Fg9RaO4V7G'),
+(5, 'SWARAN SINGH', 'lamgp1216@gmail.com', '012-7845512', 'Paediatric Neurology', 'MBBS (UM), M Med (Paeds) (UK M’sia), Fellowship In Paediatric Neurology (Mal)', 'doctor1.jpg', '$2y$10$aVZtLpIqAYTFJoVxa9y5C.42mV6dfavWXZEX3TIMbw6Je59cpKGOi');
 
 -- --------------------------------------------------------
 
@@ -128,7 +119,8 @@ CREATE TABLE `patient_info` (
 --
 
 INSERT INTO `patient_info` (`id`, `name`, `dob`, `email`, `contact_number`, `ic_number`, `password`) VALUES
-(10, 'LAM YONG QIN', '2024-11-15', 'lamyongqin@gmail.com', '016-3679616', '050111-07-0147', '$2y$10$0toeli53.1JYo/IKvkh/sevZZhmeA0tNAqlaZZVNWnu1hi6i/OrHG');
+(1, 'LAM YONG QIN', '2005-01-11', 'lamyongqin@gmail.com', '016-3679616', '050111-07-0147', '$2y$10$7Ifh4iRRWirb2knRWHjkT.ZXNSmm3Nj7xBkdnL5yGFs3On90XPL..'),
+(2, 'KIVEN RAJ', '2005-02-18', 'kivenraj1299@gmail.com', '014-9087619', '050218-07-0569', '$2y$10$IK0LShpKit7.3QbsHI9KFeX9.jHSCIcqT4GBBIjxbU3HJ6AgMM2L.');
 
 --
 -- Indexes for dumped tables
@@ -172,19 +164,19 @@ ALTER TABLE `admin_info`
 -- AUTO_INCREMENT for table `appointment`
 --
 ALTER TABLE `appointment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `doctor_info`
 --
 ALTER TABLE `doctor_info`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `patient_info`
 --
 ALTER TABLE `patient_info`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
