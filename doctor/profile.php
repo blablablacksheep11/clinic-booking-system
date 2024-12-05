@@ -17,30 +17,6 @@ $_SESSION["doctorspecialist"] = $valuereturned["specialist"];
 $_SESSION["doctordescription"] = $valuereturned["description"];
 $_SESSION["doctorpicture"] = $valuereturned["picture"];
 
-
-if (isset($_POST['save'])) {
-    //text-data processing
-    $name = $_POST["name"];
-    $email = $_POST["email"];
-    $contactnumber = $_POST["contactnumber"];
-    $specialist = $_POST["specialist"];
-    $description = $_POST["description"];
-
-    $_SESSION["doctorname"] = $name;
-    $_SESSION["doctoremail"] = $email;
-    $_SESSION["doctorcontactnumber"] = $contactnumber;
-    $_SESSION["doctorspecialist"] = $specialist;
-    $_SESSION["doctordescription"] = $description;
-
-
-    $sql = "UPDATE doctor_info SET name = '$name', email = '$email', contact_number = '$contactnumber', specialist = '$specialist', description = '$description' WHERE id = '" . $_SESSION["doctorid"] . "'";
-    if (mysqli_query($connection, $sql)) {
-        echo "<script>alert('Data updated successfully.');</script>";
-    } else {
-        echo "<script>alert('Failed to update data.');</script>";
-    }
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -251,22 +227,21 @@ if (isset($_POST['save'])) {
         <form action="profile.php" method="post" autocomplete="off">
         <label for="name" class="form-label-left">Name:</label>
             <br>
-            <input type="text" class="form-field-short-left" id="name" name="name" value="<?php echo $_SESSION["doctorname"]; ?>">
+            <input type="text" class="form-field-short-left" id="name" name="name" value="<?php echo $_SESSION["doctorname"]; ?>" disabled>
             <br><br><br>
             <label for="email" class="form-label-left">Email:</label>
             <label for="contactnumber" class="form-label-right">Contact Number:</label>
             <br>
-            <input type="email" class="form-field-short-left" id="email" name="email" value="<?php echo $_SESSION["doctoremail"]; ?>">
-            <input type="text" class="form-field-short-right" id="contactnumber" pattern="[0-9]{3}-[0-9]{7}" name="contactnumber" value="<?php echo $_SESSION["doctorcontactnumber"]; ?>">
+            <input type="email" class="form-field-short-left" id="email" name="email" value="<?php echo $_SESSION["doctoremail"]; ?>" disabled>
+            <input type="text" class="form-field-short-right" id="contactnumber" pattern="[0-9]{3}-[0-9]{7}" name="contactnumber" value="<?php echo $_SESSION["doctorcontactnumber"]; ?>" disabled>
             <br><br><br>
             <label for="specialist" class="form-label-left">Specialist:</label>
             <br>
-            <input type="text" class="form-field-long-narrow" id="specialist" name="specialist" value="<?php echo $_SESSION["doctorspecialist"]; ?>">
+            <input type="text" class="form-field-long-narrow" id="specialist" name="specialist" value="<?php echo $_SESSION["doctorspecialist"]; ?>" disabled>
             <br><br><br>
             <label for="description" class="form-label-left">Description:</label>
             <br>
-            <input type="text" class="form-field-long-wide" id="description" name="description" value="<?php echo $_SESSION["doctordescription"]; ?>">
-            <input type="submit" class="submit-btn" name="save" value="Save Changes">
+            <input type="text" class="form-field-long-wide" id="description" name="description" value="<?php echo $_SESSION["doctordescription"]; ?>" disabled>
         </form>
     </div>
     <script>
