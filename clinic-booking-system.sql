@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 05, 2024 at 01:36 PM
+-- Generation Time: Dec 05, 2024 at 02:19 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -119,7 +119,7 @@ CREATE TABLE `patient_info` (
 --
 
 INSERT INTO `patient_info` (`id`, `name`, `dob`, `email`, `contact_number`, `ic_number`, `password`) VALUES
-(1, 'LAM YONG QIN', '2005-01-11', 'lamyongqin@gmail.com', '016-3679616', '050111-07-0147', '$2y$10$7Ifh4iRRWirb2knRWHjkT.ZXNSmm3Nj7xBkdnL5yGFs3On90XPL..'),
+(1, 'LAM YONG QIN', '2005-01-11', 'lamyongqin@gmail.com', '016-3679616', '050111-07-0147', '$2y$10$R923WeTsNDUi04F.TqlK5uHh/Hu2xFTqLq0rKMlFn18/UhPWieooa'),
 (2, 'KIVEN RAJ', '2005-02-18', 'kivenraj1299@gmail.com', '014-9087619', '050218-07-0569', '$2y$10$IK0LShpKit7.3QbsHI9KFeX9.jHSCIcqT4GBBIjxbU3HJ6AgMM2L.');
 
 --
@@ -170,7 +170,7 @@ ALTER TABLE `appointment`
 -- AUTO_INCREMENT for table `doctor_info`
 --
 ALTER TABLE `doctor_info`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `patient_info`
