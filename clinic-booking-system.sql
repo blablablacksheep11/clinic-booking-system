@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 05, 2024 at 02:19 PM
+-- Generation Time: Dec 05, 2024 at 05:51 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -93,9 +93,9 @@ CREATE TABLE `doctor_info` (
 --
 
 INSERT INTO `doctor_info` (`id`, `name`, `email`, `contact_number`, `specialist`, `description`, `picture`, `password`) VALUES
-(1, 'TOH, HANNAH', 'hooihoon70@outlook.com', '012-3369879', 'Paediatric Medicine', 'MBBS (Bombay), MRCP (UK), FRCP (Glasg)', 'doctor4.jpg', '$2y$10$0/7YeP66Nx8BuT3IzBxjgeiSWJl.4MIj6Orfx8N0IRGN5AJPIGVNq'),
+(1, 'TOH, HANNAH', 'lamyongqin@outlook.com', '012-3369879', 'Paediatric Medicine', 'MBBS (Bombay), MRCP (UK), FRCP (Glasg)', 'doctor4.jpg', '$2y$10$0/7YeP66Nx8BuT3IzBxjgeiSWJl.4MIj6Orfx8N0IRGN5AJPIGVNq'),
 (2, 'LOH KEAN HENG', 'hooihoon70@gmail.com', '016-4873356', 'Paediatric Medicine & Neonatology', 'MD (Mal), MRCP (UK), M Med (Paeds) (Mal)', 'doctor3.jpg', '$2y$10$PYgRt2VUQ2ajlrlcv1Z8oOyIo48SECNKnNnEkb9R1TyTOFSZtyiqy'),
-(4, 'AINA BT OTHMAN', 'lamyongqin@outlook.com', '016-5117996', 'Paediatric Medicine', 'MD (Taiwan)', 'doctor2.jpg', '$2y$10$mxz.i3s5uBZt2YMLgne5zOd71VX6MeZrpJUpeU.W3A1Fg9RaO4V7G'),
+(4, 'AINA BT OTHMAN', 'hooihoon70@outlook.com', '016-5117996', 'Paediatric Medicine', 'MD (Taiwan)', 'doctor2.jpg', '$2y$10$mxz.i3s5uBZt2YMLgne5zOd71VX6MeZrpJUpeU.W3A1Fg9RaO4V7G'),
 (5, 'SWARAN SINGH', 'lamgp1216@gmail.com', '012-7845512', 'Paediatric Neurology', 'MBBS (UM), M Med (Paeds) (UK M’sia), Fellowship In Paediatric Neurology (Mal)', 'doctor1.jpg', '$2y$10$aVZtLpIqAYTFJoVxa9y5C.42mV6dfavWXZEX3TIMbw6Je59cpKGOi');
 
 -- --------------------------------------------------------
