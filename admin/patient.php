@@ -3,10 +3,10 @@ session_start();
 include("../include/database.php");
 include("../include/admin-navbar.php");
 
-if (isset($_POST["edit"])){
+if (isset($_POST["edit"])) {
     $id = $_POST["edit"];
     $_SESSION["patientid"] = $id;
-
+    
     echo "<script>window.location.href = 'edit-patient.php';</script>";
 }
 
@@ -69,12 +69,12 @@ if (isset($_POST["edit"])){
 
         .name-label {
             position: absolute;
-            left: 10%;
+            left: 12%;
             font-family: Roboto;
             font-size: 1.0rem;
         }
 
-        .specialist-label {
+        .icnumber-label {
             position: absolute;
             left: 30%;
             font-family: Roboto;
@@ -176,12 +176,12 @@ if (isset($_POST["edit"])){
         #name-title {
             position: absolute;
             bottom: 10%;
-            left: 10%;
+            left: 12%;
             font-family: Roboto;
             font-size: 1.0rem;
         }
 
-        #specialist-title {
+        #icnumber-title {
             position: absolute;
             bottom: 10%;
             left: 30%;
@@ -193,20 +193,20 @@ if (isset($_POST["edit"])){
             background-color: #84c8e8;
         }
 
-        #doctor-nav-btn {
+        #patient-nav-btn {
             border: 3px solid white;
             background-color: #9dbdea;
         }
 
-        #doctor-nav-btn .st0 {
-            stroke: white;
+        #patient-nav-btn .fil0 {
+            fill: white;
         }
 
-        #doctor-nav-btn .nav-btn-label {
+        #patient-nav-btn .nav-btn-label {
             color: white;
         }
 
-        #doctor-nav-btn:hover {
+        #patient-nav-btn:hover {
             background-color: #70a5ef;
         }
 
@@ -232,18 +232,18 @@ if (isset($_POST["edit"])){
     <div id="content-container"></div>
     <script>
         $(document).ready(function() {
-            $("#content-container").load("load-doctor-list.php");
-            $(document).on("click", ".remove-btn", function(){
+            $("#content-container").load("load-patient-list.php");
+            $(document).on("click", ".remove-btn", function() {
                 var id = $(this).val();
 
                 $.ajax({
-                    url: "remove-doctor.php",
+                    url: "remove-patient.php",
                     method: "POST",
                     data: {
-                        id:id
+                        id: id
                     },
                     success: function() {
-                        $("#content-container").load("load-doctor-list.php");
+                        $("#content-container").load("load-patient-list.php");
                     }
                 })
             })

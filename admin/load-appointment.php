@@ -62,4 +62,5 @@ if (mysqli_num_rows($result) > 0) {
     echo "<div id='empty-item'>";
     echo "<label id='empty-label'>No upcoming appointment</label>";
     echo "</div>";
+    echo "<script>document.getElementById('request-btn').addEventListener('click', function(){window.location.href = 'request.php';})</script>";
 }

@@ -2,81 +2,40 @@
 session_start();
 include("../include/database.php");
 include("../include/admin-navbar.php");
-include("../include/mini-sidenavbar-doctor.php");
+include("../include/mini-sidenavbar-patient.php");
 
-
-$id = $_SESSION["doctorid"];
-$sql = "SELECT * FROM doctor_info WHERE id = '$id'";
+$id = $_SESSION["patientid"];
+$sql = "SELECT * FROM patient_info WHERE id = '$id'";
 $result = mysqli_query($connection, $sql);
 $valuereturned = mysqli_fetch_assoc($result);
 
-$_SESSION["doctorid"] = $valuereturned["id"];
-$_SESSION["doctorname"] = $valuereturned["name"];
-$_SESSION["doctoremail"] = $valuereturned["email"];
-$_SESSION["doctorcontactnumber"] = $valuereturned["contact_number"];
-$_SESSION["doctorspecialist"] = $valuereturned["specialist"];
-$_SESSION["doctordescription"] = $valuereturned["description"];
-$_SESSION["doctorpicture"] = $valuereturned["picture"];
-$_SESSION["doctorpassword"] = $valuereturned["password"];
+$_SESSION["patientid"] = $valuereturned["id"];
+$_SESSION["patientname"] = $valuereturned["name"];
+$_SESSION["patientemail"] = $valuereturned["email"];
+$_SESSION["patientdob"] = $valuereturned["dob"];
+$_SESSION["patientcontactnumber"] = $valuereturned["contact_number"];
+$_SESSION["patienticnumber"] = $valuereturned["ic_number"];
+$_SESSION["patientpassword"] = $valuereturned["password"];
 
-$id = $_SESSION["doctorid"];
-$sql1 = "SELECT * FROM doctor_info WHERE id = '$id'";
-$result1 = mysqli_query($connection, $sql1);
-$valuereturned1 = mysqli_fetch_assoc($result1);
-$_SESSION["originaldoctorpicture"] = $valuereturned1["picture"];
 
 
 if (isset($_POST['save'])) {
-    //image processing
-    if (isset($_FILES["picture"])) {
-        $filename = $_FILES['picture']['name'];
-        $filetmp = $_FILES['picture']['tmp_name'];
-        $filesize = $_FILES['picture']['size'];
-        $fileerror = $_FILES['picture']['error'];
-        $filetype = $_FILES['picture']['type'];
-
-        $fileext = explode(".", $filename);
-        $fileactualext = strtolower(end($fileext));
-
-        $allowedfileext = array("jpg", "jpeg", "png");
-
-        if (in_array($fileactualext, $allowedfileext)) {
-            if ($fileerror === 0) {
-                if ($filesize < 300000) {
-                    if ($filename == $_SESSION["doctorpicture"]) {
-                        $_SESSION["doctorpicture"] = $filename;
-                    } else {
-                        $_SESSION["doctorpicture"] = $filename;
-                        move_uploaded_file($filetmp, "../pic/$filename");
-                    }
-                } else {
-                    echo "<script>alert('The picture you've selected is too large in size (" . ($filesize / 100) . "MB.)');</script>";
-                }
-            } else {
-                echo "<script>alert('Failed to upload.');</script>";
-            }
-        } else {
-            echo "<script>alert('The picture you've selected is not in the correct format. Please select again.');</script>";
-        }
-    }
-
     //text-data processing
     $name = $_POST["name"];
     $email = $_POST["email"];
-    $contactnumber = $_POST["contact-number"];
-    $specialist = $_POST["specialist"];
-    $description = $_POST["description"];
+    $contactnumber = $_POST["contactnumber"];
+    $icnumber = $_POST["icnumber"];
+    $dob = $_POST["dob"];
 
-    $_SESSION["doctorname"] = $name;
-    $_SESSION["doctoremail"] = $email;
-    $_SESSION["doctorcontactnumber"] = $contactnumber;
-    $_SESSION["doctorspecialist"] = $specialist;
-    $_SESSION["doctordescription"] = $description;
+    $_SESSION["patientname"] = $name;
+    $_SESSION["patientemail"] = $email;
+    $_SESSION["patientcontactnumber"] = $contactnumber;
+    $_SESSION["patienticnumber"] = $icnumber;
+    $_SESSION["patient"] = $dob;
 
 
-    $sql = "UPDATE doctor_info SET name = '$name', email = '$email', contact_number = '$contactnumber', specialist = '$specialist', description = '$description', picture = '$filename' WHERE id = '" . $_SESSION["doctorid"] . "'";
+    $sql = "UPDATE patient_info SET name = '$name', email = '$email', contact_number = '$contactnumber', ic_number = '$icnumber', dob = '$dob' WHERE id = '" . $_SESSION["patientid"] . "'";
     if (mysqli_query($connection, $sql)) {
-        $_SESSION["doctorpicture"] = $filename;
         echo "<script>alert('Data updated successfully.');</script>";
     } else {
         echo "<script>alert('Failed to update data.');</script>";
@@ -187,8 +146,8 @@ if (isset($_POST['save'])) {
             position: absolute;
             height: 12%;
             width: 15%;
-            top: 110%;
-            left: 100%;
+            top: 80%;
+            left: 0%;
             background-color: #9dd1ea;
             color: white;
             border: none;
@@ -210,20 +169,20 @@ if (isset($_POST['save'])) {
             font-weight: 400;
         }
 
-        #doctor-nav-btn {
+        #patient-nav-btn {
             border: 3px solid white;
             background-color: #9dbdea;
         }
 
-        #doctor-nav-btn .st0 {
-            stroke: white;
+        #patient-nav-btn .fil0 {
+            fill: white;
         }
 
-        #doctor-nav-btn .nav-btn-label {
+        #patient-nav-btn .nav-btn-label {
             color: white;
         }
 
-        #doctor-nav-btn:hover {
+        #patient-nav-btn:hover {
             background-color: #70a5ef;
         }
 
@@ -255,74 +214,37 @@ if (isset($_POST['save'])) {
             background-color: #70a5ef;
         }
 
-        #img-container {
-            position: absolute;
-            top: 23%;
-            left: 25%;
-            width: 160px;
-            height: 160px;
-            overflow: hidden;
-            border-radius: 100px;
-        }
-
-        #profile-picture {
-            position: absolute;
-            height: auto;
-            width: 150%;
-            left: -28%;
-        }
-
         #form-container {
             position: absolute;
-            top: 47%;
+            top: 25%;
             left: 25%;
             border: 0px solid black;
             width: 50%;
             height: 40%;
             overflow: visible;
         }
-
-        #file-container {
-            position: absolute;
-            top: -45%;
-            left: 30%;
-            width: 28%;
-            height: 15%;
-            border: 0px solid black;
-            display: flex;
-            align-items: center;
-            text-align: center;
-        }
     </style>
 </head>
 
 <body>
-    <h1 id="heading">Doctor / Edit</h1>
-    <div id="img-container">
-        <img id="profile-picture" src="../pic/<?php echo $_SESSION["doctorpicture"]; ?>" alt="Profile Picture">
-    </div>
+    <h1 id="heading">Patient / Edit</h1>
     <div id="form-container">
-        <form action="edit-doctor.php" method="post" enctype="multipart/form-data" autocomplete="off">
-            <div id="file-container">
-                <input type="file" name="picture" required>
-            </div>
+        <form action="edit-patient.php" method="post" autocomplete="off">
             <label for="name" class="form-label-left">Name:</label>
             <br>
-            <input type="text" class="form-field-short-left" id="name" name="name" value="<?php echo $_SESSION["doctorname"]; ?>">
+            <input type="text" class="form-field-long-narrow" id="name" name="name" value="<?php echo $_SESSION["patientname"]; ?>">
+            <br><br><br>
+            <label for="dob" class="form-label-left">Date of Birth:</label>
+            <label for="icnumber" class="form-label-right">IC Number:</label>
+            <br>
+            <input type="date" class="form-field-short-left" id="dob" name="dob" value="<?php echo $_SESSION["patientdob"]; ?>">
+            <input type="text" class="form-field-short-right" id="icnumber" pattern="[0-9]{6}-[0-9]{2}-[0-9]{4}" placeholder="010123-07-1259" name="icnumber" value="<?php echo $_SESSION["patienticnumber"]; ?>">
             <br><br><br>
             <label for="email" class="form-label-left">Email:</label>
             <label for="contactnumber" class="form-label-right">Contact Number:</label>
             <br>
-            <input type="email" class="form-field-short-left" id="email" name="email" value="<?php echo $_SESSION["doctoremail"]; ?>">
-            <input type="text" class="form-field-short-right" id="contactnumber" pattern="[0-9]{3}-[0-9]{7}" name="contact-number" value="<?php echo $_SESSION["doctorcontactnumber"]; ?>">
-            <br><br><br>
-            <label for="specialist" class="form-label-left">Specialist:</label>
-            <br>
-            <input type="text" class="form-field-long-narrow" id="specialist" name="specialist" value="<?php echo $_SESSION["doctorspecialist"]; ?>">
-            <br><br><br>
-            <label for="description" class="form-label-left">Description:</label>
-            <br>
-            <input type="text" class="form-field-long-wide" id="description" name="description" value="<?php echo $_SESSION["doctordescription"]; ?>">
+            <input type="email" class="form-field-short-left" id="email" name="email" value="<?php echo $_SESSION["patientemail"]; ?>">
+            <input type="text" class="form-field-short-right" id="contactnumber" pattern="[0-9]{3}-[0-9]{7}" name="contactnumber" value="<?php echo $_SESSION["patientcontactnumber"]; ?>">
             <input type="submit" class="submit-btn" name="save" value="Save Changes">
         </form>
     </div>

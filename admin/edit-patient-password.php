@@ -2,14 +2,14 @@
 session_start();
 include("../include/database.php");
 include("../include/admin-navbar.php");
-include("../include/mini-sidenavbar-doctor.php");
+include("../include/mini-sidenavbar-patient.php");
 
 if(isset($_POST["save"])){
     $password = $_POST["newpassword"];
 
     $hashedpassword = password_hash($password, PASSWORD_BCRYPT);
 
-    $sql = "UPDATE doctor_info SET password = '$hashedpassword' WHERE id = '".$_SESSION["doctorid"]."'";
+    $sql = "UPDATE patient_info SET password = '$hashedpassword' WHERE id = '".$_SESSION["patientid"]."'";
     if (mysqli_query($connection, $sql)){
         echo "<script>alert('Password updated successfully.');</script>";
     }
@@ -94,20 +94,20 @@ if(isset($_POST["save"])){
             font-weight: 400;
         }
 
-        #doctor-nav-btn {
+        #patient-nav-btn {
             border: 3px solid white;
             background-color: #9dbdea;
         }
 
-        #doctor-nav-btn .st0 {
-            stroke: white;
+        #patient-nav-btn .fil0 {
+            fill: white;
         }
 
-        #doctor-nav-btn .nav-btn-label {
+        #patient-nav-btn .nav-btn-label {
             color: white;
         }
 
-        #doctor-nav-btn:hover {
+        #patient-nav-btn:hover {
             background-color: #70a5ef;
         }
 
@@ -137,9 +137,9 @@ if(isset($_POST["save"])){
 </head>
 
 <body>
-    <h1 id="heading">Doctor / Edit</h1>
+    <h1 id="heading">Patient / Edit</h1>
     <div id="form-container">
-        <form action="edit-doctor-password.php" method="post" autocomplete="off">
+        <form action="edit-patient-password.php" method="post" autocomplete="off">
             <label for="newpassword-field" class="form-label-left">New-password:</label>
             <br>
             <input type="text" class="form-field-long-narrow" id="newpassword-field" name="newpassword">

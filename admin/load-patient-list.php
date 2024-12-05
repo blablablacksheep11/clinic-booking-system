@@ -19,7 +19,7 @@ if (mysqli_num_rows($result) > 0) {
             echo "<p class='name-label'>" . $row['name'] . "</p>";
             echo "<p class='icnumber-label'>" . $row['ic_number'] . "</p>";
             echo "<button type='submit' class='remove-btn' name='remove' value='" . $row['id'] . "'>Remove</button>";
-            echo "<form action='doctor.php' method='post' id='form'>";
+            echo "<form action='patient.php' method='post' id='form'>";
             echo "<button type='submit' class='edit-btn' name='edit' value='" . $row['id'] . "'>Edit</button>";
             echo "</form>";
             echo "</div>";
@@ -30,7 +30,7 @@ if (mysqli_num_rows($result) > 0) {
             echo "<p class='name-label'>" . $row['name'] . "</p>";
             echo "<p class='icnumber-label'>" . $row['ic_number'] . "</p>";
             echo "<button type='submit' class='remove-btn' name='remove' value='" . $row['id'] . "'>Remove</button>";
-            echo "<form action='doctor.php' method='post' id='form'>";
+            echo "<form action='patient.php' method='post' id='form'>";
             echo "<button type='submit' class='edit-btn' name='edit' value='" . $row['id'] . "'>Edit</button>";
             echo "</form>";
             echo "</div>";
