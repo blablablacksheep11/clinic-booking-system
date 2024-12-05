@@ -21,12 +21,8 @@ if (isset($_POST['next'])) {
         if (in_array($fileactualext, $allowedfileext)) {
             if ($fileerror === 0) {
                 if ($filesize < 300000) {
-                    if ($filename == $_SESSION["doctorpicture"]) {
-                        $_SESSION["doctorpicture"] = $filename;
-                    } else {
                         $_SESSION["doctorpicture"] = $filename;
                         move_uploaded_file($filetmp, "../pic/$filename");
-                    }
                 } else {
                     echo "<script>alert('The picture you've selected is too large in size (" . ($filesize / 100) . "MB.)');</script>";
                 }

@@ -228,7 +228,7 @@ if (isset($_POST["edit"])) {
 </head>
 
 <body>
-    <h1 id="heading">Doctor</h1>
+    <h1 id="heading">Patient</h1>
     <div id="content-container"></div>
     <script>
         $(document).ready(function() {

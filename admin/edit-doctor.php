@@ -74,7 +74,7 @@ if (isset($_POST['save'])) {
     $_SESSION["doctordescription"] = $description;
 
 
-    $sql = "UPDATE doctor_info SET name = '$name', email = '$email', contact_number = '$contactnumber', specialist = '$specialist', description = '$description', picture = '$filename' WHERE id = '" . $_SESSION["doctorid"] . "'";
+    $sql = "UPDATE doctor_info SET name = '$name', email = '$email', contact_number = '$contactnumber', specialist = '$specialist', description = '$description', picture = '".$filename."' WHERE id = '" . $_SESSION["doctorid"] . "'";
     if (mysqli_query($connection, $sql)) {
         $_SESSION["doctorpicture"] = $filename;
         echo "<script>alert('Data updated successfully.');</script>";
