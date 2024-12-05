@@ -16,7 +16,7 @@ So, to fix the problem above, the reader will need to:
 !!! A xampp server is required to run this project https://www.apachefriends.org/
 
 Database setup:
-1. go to phpmyadmin
+1. go to phpmyadmin (open the xampp application and click the admin button beside MySQL)
 2. create a table named : clinic-booking-system
 3. open the query interface
 4. paste the sql statement one by one (the sql file is included in the code file)
