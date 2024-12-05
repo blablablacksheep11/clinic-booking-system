@@ -13,6 +13,8 @@ So, to fix the problem above, the reader will need to:
 4. paste the following command:  composer require phpmailer/phpmailer
 5. save the entire code file
 
+!!! A xampp server is required to run this project https://www.apachefriends.org/
+
 Database setup:
 1. go to phpmyadmin
 2. create a table named : clinic-booking-system
