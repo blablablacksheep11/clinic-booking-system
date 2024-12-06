@@ -145,7 +145,7 @@ if (isset($_POST["save"])) {
 </head>
 
 <body>
-    <h1 id="heading">Patient / Edit</h1>
+    <h1 id="heading">Profile / Password</h1>
     <div id="form-container">
         <form action="profile-password.php" method="post" autocomplete="off">
             <label for="oldpassword-field" class="form-label-left">Old-password:</label>
